@@ -18,12 +18,16 @@
     "@reviewai/shared": "workspace:*",
     "cors": "^2.8.5",
     "dotenv": "^16.5.0",
-    "express": "^5.1.0"
+    "express": "^5.1.0",
+    "morgan": "^1.10.1"
   },
   "scripts": {
     "build": "tsc -b",
     "dev": "tsx watch src/server.ts",
     "lint": "eslint \"src/**/*.ts\"",
     "typecheck": "tsc -b --pretty false"
+  },
+  "devDependencies": {
+    "@types/morgan": "^1.9.10"
   }
 }

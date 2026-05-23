@@ -1,4 +1,4 @@
-import express, { Router, type Request, type Response } from "express";
+import { Router, type Request, type Response } from "express";
 import { createHmac, timingSafeEqual } from "node:crypto";
 import { Octokit } from "@octokit/rest";
 
@@ -371,10 +371,7 @@ export const createGithubRouter = (reviewEngine: ReviewEngine): Router => {
   const router = Router();
   const octokit = createGithubClient();
 
-  router.post(
-    "/webhooks/github",
-    express.raw({ type: "application/json", limit: "2mb" }),
-    async (request: Request, response: Response) => {
+  router.post("/", async (request: Request, response: Response) => {
       try {
         const body = request.body;
 
@@ -461,8 +458,7 @@ export const createGithubRouter = (reviewEngine: ReviewEngine): Router => {
           error: error instanceof Error ? error.message : "Unable to process GitHub webhook."
         });
       }
-    }
-  );
+  });
 
   return router;
 };

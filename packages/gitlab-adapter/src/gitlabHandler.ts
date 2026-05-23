@@ -1,7 +1,7 @@
 import { createHmac, timingSafeEqual } from "node:crypto";
 
 import axios, { AxiosError, type AxiosInstance } from "axios";
-import express, { type Request, type Response, Router } from "express";
+import { type Request, type Response, Router } from "express";
 
 import { parseDiff } from "@reviewai/core";
 import type { FileDiff, PullRequestEvent, ReviewIssue, ReviewResult } from "@reviewai/shared";
@@ -397,7 +397,7 @@ export const createGitlabRouter = (reviewEngine: ReviewEngine): Router => {
   const router = Router();
   const client = createGitlabClient();
 
-  router.post("/webhooks/gitlab", express.json({ limit: "2mb" }), async (request: Request, response: Response) => {
+  router.post("/", async (request: Request, response: Response) => {
     try {
       const tokenHeader = request.header("x-gitlab-token");
       if (!verifyGitlabToken(getGitlabSecret(), tokenHeader)) {
