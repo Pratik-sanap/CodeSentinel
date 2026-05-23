@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ReviewAI</title>
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <main class="shell">
+      <section class="hero card">
+        <div class="eyebrow">ReviewAI</div>
+        <h1>Ship reviews with a calmer signal-to-noise ratio.</h1>
+        <p>
+          Feed ReviewAI a diff, webhook payload, or API request and it surfaces
+          obvious risks before they turn into noisy pull request comments.
+        </p>
+        <div class="hero-grid">
+          <div>
+            <span class="metric-label">Primary focus</span>
+            <strong>Code review triage</strong>
+          </div>
+          <div>
+            <span class="metric-label">Providers</span>
+            <strong>GitHub + GitLab</strong>
+          </div>
+          <div>
+            <span class="metric-label">Engine</span>
+            <strong>TypeScript + Express</strong>
+          </div>
+        </div>
+      </section>
+
+      <section class="card workspace">
+        <header class="section-head">
+          <div>
+            <h2>Review console</h2>
+            <p>Try the local analysis endpoint with a sample diff.</p>
+          </div>
+          <button id="run-demo" type="button">Run analysis</button>
+        </header>
+
+        <form id="review-form" class="review-form">
+          <label>
+            Provider
+            <select name="provider">
+              <option value="github">GitHub</option>
+              <option value="gitlab">GitLab</option>
+            </select>
+          </label>
+
+          <label>
+            Repository
+            <input name="repository" value="acme/reviewai-demo" />
+          </label>
+
+          <label>
+            Pull request title
+            <input name="title" value="Refactor API route" />
+          </label>
+
+          <label class="span-2">
+            Diff
+            <textarea name="diff" rows="12">diff --git a/src/api.ts b/src/api.ts
++++ b/src/api.ts
++ console.log("debug");
++ const apiKey = "secret";
++ return eval(expression);</textarea>
+          </label>
+        </form>
+      </section>
+
+      <section class="card results">
+        <header class="section-head">
+          <div>
+            <h2>Findings</h2>
+            <p id="status-text">Waiting for the first analysis run.</p>
+          </div>
+          <div class="score-pill" id="risk-score">--</div>
+        </header>
+        <div id="result-list" class="result-list"></div>
+      </section>
+    </main>
+
+    <script src="/app.js"></script>
+  </body>
+</html>

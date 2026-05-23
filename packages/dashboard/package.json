@@ -1,0 +1,29 @@
+{
+  "name": "@reviewai/dashboard",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "main": "./dist/server.js",
+  "types": "./dist/server.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/server.d.ts",
+      "default": "./dist/server.js"
+    }
+  },
+  "dependencies": {
+    "@reviewai/core": "workspace:*",
+    "@reviewai/github-adapter": "workspace:*",
+    "@reviewai/gitlab-adapter": "workspace:*",
+    "@reviewai/shared": "workspace:*",
+    "cors": "^2.8.5",
+    "dotenv": "^16.5.0",
+    "express": "^5.1.0"
+  },
+  "scripts": {
+    "build": "tsc -b",
+    "dev": "tsx watch src/server.ts",
+    "lint": "eslint \"src/**/*.ts\"",
+    "typecheck": "tsc -b --pretty false"
+  }
+}
