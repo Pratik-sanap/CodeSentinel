@@ -12,8 +12,10 @@
     }
   },
   "dependencies": {
+    "@octokit/rest": "^21.1.1",
     "@reviewai/core": "workspace:*",
-    "@reviewai/shared": "workspace:*"
+    "@reviewai/shared": "workspace:*",
+    "express": "^5.1.0"
   },
   "scripts": {
     "build": "tsc -b",
