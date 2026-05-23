@@ -3,7 +3,7 @@ import { createHmac, timingSafeEqual } from "node:crypto";
 import axios, { AxiosError, type AxiosInstance } from "axios";
 import { type Request, type Response, Router } from "express";
 
-import { parseDiff } from "@reviewai/core";
+import { getMergeRecommendation, parseDiff } from "@reviewai/core";
 import type { FileDiff, PullRequestEvent, ReviewIssue, ReviewResult } from "@reviewai/shared";
 
 type ReviewEngine = (event: PullRequestEvent, files: FileDiff[]) => Promise<ReviewResult> | ReviewResult;
@@ -390,6 +390,18 @@ const postSummaryNote = async (
   );
 };
 
+const approveMergeRequest = async (client: AxiosInstance, projectId: number | string, mergeRequestIid: number | string): Promise<void> => {
+  await withRetry(() =>
+    client.post(`/projects/${encodeURIComponent(String(projectId))}/merge_requests/${encodeURIComponent(String(mergeRequestIid))}/approve`)
+  );
+};
+
+const unapproveMergeRequest = async (client: AxiosInstance, projectId: number | string, mergeRequestIid: number | string): Promise<void> => {
+  await withRetry(() =>
+    client.post(`/projects/${encodeURIComponent(String(projectId))}/merge_requests/${encodeURIComponent(String(mergeRequestIid))}/unapprove`)
+  );
+};
+
 const normalizeAction = (payload: GitLabWebhookPayload): string =>
   payload.merge_request?.action ?? payload.merge_request?.state ?? payload.object_kind ?? "unknown";
 
@@ -448,20 +460,38 @@ export const createGitlabRouter = (reviewEngine: ReviewEngine): Router => {
 
       const files = reviewFiles.map((item) => item.diff);
       const reviewResult = await reviewEngine(pullEvent, files);
+      const mergeRecommendation = getMergeRecommendation(reviewResult);
       const notes = buildDiscussionNotes(reviewFiles, reviewResult.issues, mergeRequest);
+
+      if (mergeRecommendation.verdict === "approve" || mergeRecommendation.verdict === "approve-with-changes") {
+        await approveMergeRequest(client, project.id, mergeRequest.iid);
+      } else {
+        await unapproveMergeRequest(client, project.id, mergeRequest.iid);
+      }
 
       if (notes.length > 0) {
         await postDiscussionNotes(client, project.id, mergeRequest.iid, notes);
       }
 
-      await postSummaryNote(client, project.id, mergeRequest.iid, buildSummaryBody(reviewResult));
+      await postSummaryNote(
+        client,
+        project.id,
+        mergeRequest.iid,
+        [
+          `**Merge readiness:** ${mergeRecommendation.verdict}`,
+          `**Confidence:** ${mergeRecommendation.confidence}/100`,
+          "",
+          buildSummaryBody(reviewResult)
+        ].join("\n")
+      );
 
       response.status(200).json({
         ok: true,
         reviewId: reviewResult.prId,
         issues: reviewResult.issues.length,
         score: reviewResult.score,
-        summary: reviewResult.summary
+        summary: reviewResult.summary,
+        mergeRecommendation
       });
     } catch (error) {
       console.error("GitLab webhook review failed:", error);

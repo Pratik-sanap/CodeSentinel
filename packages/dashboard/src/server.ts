@@ -6,7 +6,7 @@ import morgan from "morgan";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
-import { runFullReview } from "@reviewai/core";
+import { explainIssue, getMergeRecommendation, runFullReview, type MergeRecommendation } from "@reviewai/core";
 import { createGithubRouter } from "@reviewai/github-adapter";
 import { createGitlabRouter } from "@reviewai/gitlab-adapter";
 import type { FileDiff, PullRequestEvent, ReviewInput, ReviewIssue, ReviewResult } from "@reviewai/shared";
@@ -15,6 +15,14 @@ interface StoredReview {
   key: string;
   createdAt: string;
   event: PullRequestEvent;
+  files: FileDiff[];
+  result: ReviewResult;
+  mergeRecommendation: MergeRecommendation;
+}
+
+interface DemoSeedReview {
+  event: PullRequestEvent;
+  files: FileDiff[];
   result: ReviewResult;
 }
 
@@ -30,6 +38,7 @@ interface ReviewListItem {
   targetBranch: string;
   score: number;
   issueCount: number;
+  criticalIssueCount: number;
   summary: string;
 }
 
@@ -45,12 +54,14 @@ const reviewStore = new Map<string, StoredReview>();
 
 const reviewKey = (event: PullRequestEvent): string => `${event.platform}:${event.repoFullName}:${event.id}`;
 
-const saveReview = (event: PullRequestEvent, result: ReviewResult): StoredReview => {
+const saveReview = (event: PullRequestEvent, files: FileDiff[], result: ReviewResult): StoredReview => {
   const record: StoredReview = {
     key: reviewKey(event),
     createdAt: new Date().toISOString(),
     event,
-    result
+    files,
+    result,
+    mergeRecommendation: getMergeRecommendation(result)
   };
 
   reviewStore.delete(record.key);
@@ -74,6 +85,7 @@ const listRecentReviews = (): ReviewListItem[] =>
       targetBranch: record.event.targetBranch,
       score: record.result.score,
       issueCount: record.result.issues.length,
+      criticalIssueCount: record.result.issues.filter((issue) => issue.severity === "critical").length,
       summary: record.result.summary
     }));
 
@@ -81,6 +93,273 @@ const findReviewByPrId = (prId: string): StoredReview | undefined =>
   Array.from(reviewStore.values())
     .reverse()
     .find((record) => record.result.prId === prId || record.event.id === prId);
+
+const resolveIssueByIndex = (review: StoredReview, issueIndex: number): ReviewIssue | undefined => review.result.issues[issueIndex];
+
+const buildCodeContext = (review: StoredReview, issue: ReviewIssue): string => {
+  const file = review.files.find((entry) => entry.filename === issue.filename) ?? review.files[0];
+
+  if (!file) {
+    return "No source context is available for this issue.";
+  }
+
+  const lines = file.patch.replace(/\r\n/g, "\n").split("\n");
+  const exactIndex = lines.findIndex((line) => line.startsWith(`+${issue.line}:`) || line.startsWith(`-${issue.line}:`));
+  const targetIndex = exactIndex >= 0 ? exactIndex : 0;
+  const startIndex = Math.max(0, targetIndex - 5);
+  const endIndex = Math.min(lines.length, targetIndex + 6);
+  const contextLines = lines.slice(startIndex, endIndex);
+
+  return [
+    `File: ${file.filename}`,
+    `Issue line: ${issue.line}`,
+    "Context (5 lines before and after where available):",
+    contextLines.length > 0 ? contextLines.join("\n") : "No diff context captured for this file."
+  ].join("\n");
+};
+
+const writeSseEvent = (response: Response, event: string | undefined, data: string): void => {
+  if (event) {
+    response.write(`event: ${event}\n`);
+  }
+
+  for (const line of data.split(/\r?\n/)) {
+    response.write(`data: ${line}\n`);
+  }
+
+  response.write("\n");
+};
+
+const createDemoSeedReviews = (): DemoSeedReview[] => {
+  const seeds: DemoSeedReview[] = [
+    {
+      event: {
+        id: "demo-101",
+        title: "Harden auth token handling",
+        description: "Replace hard-coded token paths and tighten validation.",
+        author: "demo-bot",
+        sourceBranch: "demo/auth-hardening",
+        targetBranch: "main",
+        platform: "github",
+        diffUrl: "https://example.com/demo-101.diff",
+        repoFullName: "acme/codesentinel"
+      },
+      files: [
+        {
+          filename: "src/auth.ts",
+          patch: "-12: const token = process.env.API_KEY\n+12: const token = readSecret('api-key')",
+          additions: 1,
+          deletions: 1,
+          language: "typescript",
+          changes: [
+            { type: "delete", oldLineNumber: 12, content: "const token = process.env.API_KEY" },
+            { type: "add", newLineNumber: 12, content: "const token = readSecret('api-key')" }
+          ]
+        }
+      ],
+      result: {
+        prId: "demo-101",
+        summary: "Improves secret handling and reduces the risk of leaking credentials in logs.",
+        issues: [
+          {
+            severity: "critical",
+            category: "security",
+            line: 12,
+            message: "Credentials are still read from an environment path that can be logged or copied too easily.",
+            suggestion: "Move the value behind a secret manager wrapper and avoid echoing it in debug output.",
+            filename: "src/auth.ts"
+          }
+        ],
+        score: 42,
+        processingMs: 1280
+      }
+    },
+    {
+      event: {
+        id: "demo-102",
+        title: "Trim API payloads before sending",
+        description: "Reduces network overhead for list endpoints.",
+        author: "demo-bot",
+        sourceBranch: "demo/api-payloads",
+        targetBranch: "main",
+        platform: "gitlab",
+        diffUrl: "https://example.com/demo-102.diff",
+        repoFullName: "acme/platform-api"
+      },
+      files: [
+        {
+          filename: "src/routes/projects.ts",
+          patch: "-81: return response.json(items)\n+81: return response.json(items.slice(0, 20))",
+          additions: 1,
+          deletions: 1,
+          language: "typescript",
+          changes: [
+            { type: "delete", oldLineNumber: 81, content: "return response.json(items)" },
+            { type: "add", newLineNumber: 81, content: "return response.json(items.slice(0, 20))" }
+          ]
+        }
+      ],
+      result: {
+        prId: "demo-102",
+        summary: "A small performance improvement that lowers response size for high-traffic list views.",
+        issues: [
+          {
+            severity: "warning",
+            category: "performance",
+            line: 81,
+            message: "This endpoint still returns more data than most UI consumers need.",
+            suggestion: "Cap the payload and add pagination metadata so clients can request more on demand.",
+            filename: "src/routes/projects.ts"
+          }
+        ],
+        score: 74,
+        processingMs: 940
+      }
+    },
+    {
+      event: {
+        id: "demo-103",
+        title: "Refactor logging helper",
+        description: "Swap noisy log formatting for a shared utility.",
+        author: "demo-bot",
+        sourceBranch: "demo/logging-refactor",
+        targetBranch: "main",
+        platform: "github",
+        diffUrl: "https://example.com/demo-103.diff",
+        repoFullName: "acme/codesentinel"
+      },
+      files: [
+        {
+          filename: "src/logging.ts",
+          patch: "-5: console.log('debug', payload)\n+5: logger.debug({ payload })",
+          additions: 1,
+          deletions: 1,
+          language: "typescript",
+          changes: [
+            { type: "delete", oldLineNumber: 5, content: "console.log('debug', payload)" },
+            { type: "add", newLineNumber: 5, content: "logger.debug({ payload })" }
+          ]
+        }
+      ],
+      result: {
+        prId: "demo-103",
+        summary: "Clean refactor with a lower-noise logging path and no merge risk.",
+        issues: [
+          {
+            severity: "suggestion",
+            category: "style",
+            line: 5,
+            message: "The logger wrapper can be simplified further.",
+            suggestion: "Consider extracting a shared helper for the debug payload shape.",
+            filename: "src/logging.ts"
+          }
+        ],
+        score: 88,
+        processingMs: 620
+      }
+    },
+    {
+      event: {
+        id: "demo-104",
+        title: "Guard payment retry loop",
+        description: "Prevent duplicate processing during retries.",
+        author: "demo-bot",
+        sourceBranch: "demo/payment-guard",
+        targetBranch: "main",
+        platform: "gitlab",
+        diffUrl: "https://example.com/demo-104.diff",
+        repoFullName: "acme/billing"
+      },
+      files: [
+        {
+          filename: "src/payments/retry.ts",
+          patch: "-30: await processPayment(orderId)\n+30: if (!alreadyProcessed(orderId)) {\n+31:   await processPayment(orderId)\n+32: }",
+          additions: 3,
+          deletions: 1,
+          language: "typescript",
+          changes: [
+            { type: "delete", oldLineNumber: 30, content: "await processPayment(orderId)" },
+            { type: "add", newLineNumber: 30, content: "if (!alreadyProcessed(orderId)) {" },
+            { type: "add", newLineNumber: 31, content: "  await processPayment(orderId)" },
+            { type: "add", newLineNumber: 32, content: "}" }
+          ]
+        }
+      ],
+      result: {
+        prId: "demo-104",
+        summary: "Introduces a guard around payment retry handling to avoid duplicate charges.",
+        issues: [
+          {
+            severity: "critical",
+            category: "bug",
+            line: 30,
+            message: "Retry logic could still double-submit a payment when the guard state is stale.",
+            suggestion: "Move the check and payment write into a single atomic transaction or idempotency boundary.",
+            filename: "src/payments/retry.ts"
+          }
+        ],
+        score: 53,
+        processingMs: 1430
+      }
+    },
+    {
+      event: {
+        id: "demo-105",
+        title: "Improve cache key naming",
+        description: "Clarify cache key ownership for future contributors.",
+        author: "demo-bot",
+        sourceBranch: "demo/cache-keys",
+        targetBranch: "main",
+        platform: "github",
+        diffUrl: "https://example.com/demo-105.diff",
+        repoFullName: "acme/platform-api"
+      },
+      files: [
+        {
+          filename: "src/cache.ts",
+          patch: "-18: const key = `${userId}:${scope}`\n+18: const key = buildCacheKey(userId, scope)",
+          additions: 1,
+          deletions: 1,
+          language: "typescript",
+          changes: [
+            { type: "delete", oldLineNumber: 18, content: "const key = `${userId}:${scope}`" },
+            { type: "add", newLineNumber: 18, content: "const key = buildCacheKey(userId, scope)" }
+          ]
+        }
+      ],
+      result: {
+        prId: "demo-105",
+        summary: "A straightforward cleanup that improves readability and future maintenance.",
+        issues: [
+          {
+            severity: "suggestion",
+            category: "smell",
+            line: 18,
+            message: "The inline key template is a little hard to scan.",
+            suggestion: "Wrap the cache key shape in a named helper so future changes stay consistent.",
+            filename: "src/cache.ts"
+          }
+        ],
+        score: 91,
+        processingMs: 510
+      }
+    }
+  ];
+
+  return seeds;
+};
+
+const seedDemoStore = (): number => {
+  const seeds = createDemoSeedReviews();
+
+  reviewStore.clear();
+
+  for (const seed of seeds) {
+    saveReview(seed.event, seed.files, seed.result);
+  }
+
+  return seeds.length;
+};
 
 const createStats = (): ReviewStats => {
   const issuesByCategory: ReviewStats["issuesByCategory"] = {
@@ -152,7 +431,7 @@ const parseReviewInput = (body: unknown): ReviewInput | undefined => {
 
 const buildReviewEngine = () => async (event: PullRequestEvent, files: FileDiff[]): Promise<ReviewResult> => {
   const result = await runFullReview(event, files);
-  saveReview(event, result);
+  saveReview(event, files, result);
   return result;
 };
 
@@ -193,6 +472,49 @@ export const createApp = (): express.Express => {
     response.json(review);
   });
 
+  app.get<{ prId: string; issueIndex: string }>("/api/reviews/:prId/explain/:issueIndex", async (request: Request, response: Response) => {
+    const prId = Array.isArray(request.params.prId) ? request.params.prId[0] : request.params.prId;
+    const issueIndexValue = Array.isArray(request.params.issueIndex) ? request.params.issueIndex[0] : request.params.issueIndex;
+    const issueIndex = Number.parseInt(String(issueIndexValue), 10);
+
+    if (typeof prId !== "string" || !Number.isInteger(issueIndex) || issueIndex < 0) {
+      response.status(400).json({ error: "Invalid explanation request." });
+      return;
+    }
+
+    const review = findReviewByPrId(prId);
+
+    if (!review) {
+      response.status(404).json({ error: "Review not found." });
+      return;
+    }
+
+    const issue = resolveIssueByIndex(review, issueIndex);
+
+    if (!issue) {
+      response.status(404).json({ error: "Issue not found." });
+      return;
+    }
+
+    response.status(200);
+    response.setHeader("Content-Type", "text/event-stream");
+    response.setHeader("Cache-Control", "no-cache");
+    response.setHeader("Connection", "keep-alive");
+    response.flushHeaders?.();
+
+    try {
+      for await (const chunk of explainIssue(issue, buildCodeContext(review, issue))) {
+        writeSseEvent(response, undefined, chunk);
+      }
+
+      writeSseEvent(response, "done", "[DONE]");
+    } catch (error) {
+      writeSseEvent(response, "error", error instanceof Error ? error.message : "Unable to generate an explanation.");
+    } finally {
+      response.end();
+    }
+  });
+
   app.get("/api/stats", (_request: Request, response: Response) => {
     response.json(createStats());
   });
@@ -209,8 +531,14 @@ export const createApp = (): express.Express => {
 
     response.json({
       input: reviewInput,
-      result
+      result,
+      mergeRecommendation: getMergeRecommendation(result)
     });
+  });
+
+  app.post("/api/demo/seed", (_request: Request, response: Response) => {
+    const seeded = seedDemoStore();
+    response.json({ ok: true, seeded });
   });
 
   app.use(express.static(publicDirectory));

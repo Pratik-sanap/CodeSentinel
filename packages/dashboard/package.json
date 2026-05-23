@@ -19,15 +19,22 @@
     "cors": "^2.8.5",
     "dotenv": "^16.5.0",
     "express": "^5.1.0",
-    "morgan": "^1.10.1"
+    "morgan": "^1.10.1",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "recharts": "^2.15.4"
   },
   "scripts": {
-    "build": "tsc -b",
+    "build": "node ./scripts/build-frontend.mjs && tsc -b",
+    "build:frontend": "node ./scripts/build-frontend.mjs",
     "dev": "tsx watch src/server.ts",
     "lint": "eslint \"src/**/*.ts\"",
     "typecheck": "tsc -b --pretty false"
   },
   "devDependencies": {
-    "@types/morgan": "^1.9.10"
+    "@types/morgan": "^1.9.10",
+    "@types/react": "^18.3.3",
+    "@types/react-dom": "^18.3.0",
+    "esbuild": "^0.28.0"
   }
 }

@@ -2,7 +2,7 @@ import { Router, type Request, type Response } from "express";
 import { createHmac, timingSafeEqual } from "node:crypto";
 import { Octokit } from "@octokit/rest";
 
-import { parseDiff } from "@reviewai/core";
+import { getMergeRecommendation, parseDiff } from "@reviewai/core";
 import type { FileDiff, PullRequestEvent, ReviewIssue, ReviewResult } from "@reviewai/shared";
 
 type ReviewEngine = (event: PullRequestEvent, files: FileDiff[]) => Promise<ReviewResult> | ReviewResult;
@@ -367,6 +367,9 @@ const buildReviewComments = (
 
 const createGithubClient = (): Octokit => new Octokit({ auth: getGithubAuthToken() });
 
+const mapReviewEvent = (verdict: ReturnType<typeof getMergeRecommendation>["verdict"]): "APPROVE" | "REQUEST_CHANGES" =>
+  verdict === "approve" || verdict === "approve-with-changes" ? "APPROVE" : "REQUEST_CHANGES";
+
 export const createGithubRouter = (reviewEngine: ReviewEngine): Router => {
   const router = Router();
   const octokit = createGithubClient();
@@ -430,13 +433,14 @@ export const createGithubRouter = (reviewEngine: ReviewEngine): Router => {
         const diffs = fileResults.map(toFileDiff);
         const reviewInputFiles = diffs.map((item) => item.diff);
         const reviewResult = await reviewEngine(pullEvent, reviewInputFiles);
+        const mergeRecommendation = getMergeRecommendation(reviewResult);
         const comments = buildReviewComments(diffs, reviewResult.issues);
 
         const reviewRequest = {
           owner,
           repo,
           pull_number: pullNumber,
-          event: "COMMENT" as const,
+          event: mapReviewEvent(mergeRecommendation.verdict),
           body: buildSummaryBody(reviewResult),
           comments,
           ...(pullRequest.head?.sha ? { commit_id: pullRequest.head.sha } : {})
@@ -450,6 +454,7 @@ export const createGithubRouter = (reviewEngine: ReviewEngine): Router => {
           issues: reviewResult.issues.length,
           score: reviewResult.score,
           summary: reviewResult.summary,
+          mergeRecommendation,
           deliveryId: request.header(githubDeliveryHeaderName) ?? undefined
         });
       } catch (error) {
