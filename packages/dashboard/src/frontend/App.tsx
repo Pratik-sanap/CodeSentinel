@@ -603,13 +603,18 @@ export default function App() {
             detail="Incoming pull requests processed in the live feed."
             tone={scoreTone(88)}
           />
-          <MetricCard
-            label="Avg Quality Score"
-            value={isLoading ? "…" : `${metrics.avgQualityScore}`}
-            detail="Rolling average across the current review window."
-            tone={scoreTone(metrics.avgQualityScore)}
-            gaugeScore={metrics.avgQualityScore}
-          />
+          <article className={`rounded-3xl border border-white/8 bg-white/[0.04] p-5 shadow-[0_22px_60px_rgba(2,6,23,0.35)] ${scoreTone(metrics.avgQualityScore).surface}`}>
+            <div className="flex h-full flex-col">
+              <p className="text-xs font-medium uppercase tracking-[0.26em] text-slate-400">Avg Quality Score</p>
+              <p className="mt-3 text-[32px] font-semibold leading-none tracking-tight text-slate-50">
+                {isLoading ? "…" : metrics.avgQualityScore}
+              </p>
+              <p className={`mt-2 text-sm font-medium ${scoreTone(metrics.avgQualityScore).text}`}>
+                {isLoading ? "" : scoreTone(metrics.avgQualityScore).label}
+              </p>
+              <p className="mt-2 text-sm leading-6 text-slate-400">Rolling average across the current review window.</p>
+            </div>
+          </article>
           <MetricCard
             label="Issues Found"
             value={isLoading ? "…" : formatCompactNumber(metrics.issuesFound)}

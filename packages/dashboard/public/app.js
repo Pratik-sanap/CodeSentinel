@@ -31590,16 +31590,12 @@
               tone: scoreTone(88)
             }
           ),
-          /* @__PURE__ */ (0, import_jsx_runtime.jsx)(
-            MetricCard,
-            {
-              label: "Avg Quality Score",
-              value: isLoading ? "\u2026" : `${metrics.avgQualityScore}`,
-              detail: "Rolling average across the current review window.",
-              tone: scoreTone(metrics.avgQualityScore),
-              gaugeScore: metrics.avgQualityScore
-            }
-          ),
+          /* @__PURE__ */ (0, import_jsx_runtime.jsx)("article", { className: `rounded-3xl border border-white/8 bg-white/[0.04] p-5 shadow-[0_22px_60px_rgba(2,6,23,0.35)] ${scoreTone(metrics.avgQualityScore).surface}`, children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { className: "flex h-full flex-col", children: [
+            /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", { className: "text-xs font-medium uppercase tracking-[0.26em] text-slate-400", children: "Avg Quality Score" }),
+            /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", { className: "mt-3 text-[32px] font-semibold leading-none tracking-tight text-slate-50", children: isLoading ? "\u2026" : metrics.avgQualityScore }),
+            /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", { className: `mt-2 text-sm font-medium ${scoreTone(metrics.avgQualityScore).text}`, children: isLoading ? "" : scoreTone(metrics.avgQualityScore).label }),
+            /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", { className: "mt-2 text-sm leading-6 text-slate-400", children: "Rolling average across the current review window." })
+          ] }) }),
           /* @__PURE__ */ (0, import_jsx_runtime.jsx)(
             MetricCard,
             {
