@@ -26,6 +26,20 @@ interface DemoSeedReview {
   result: ReviewResult;
 }
 
+const sanitizeDemoTitle = (value: string): string =>
+  value
+    .normalize("NFKC")
+    .replace(/[^\x20-\x7E]/g, "")
+    .replace(/\s+/g, " ")
+    .trim();
+
+const sanitizeDemoRepo = (value: string): string =>
+  value
+    .normalize("NFKC")
+    .replace(/[^a-zA-Z0-9/_-]/g, "")
+    .replace(/\/{2,}/g, "/")
+    .trim();
+
 interface ReviewListItem {
   key: string;
   createdAt: string;
@@ -51,6 +65,8 @@ interface ReviewStats {
 const currentDirectory = path.dirname(fileURLToPath(import.meta.url));
 const publicDirectory = path.resolve(currentDirectory, "../public");
 const reviewStore = new Map<string, StoredReview>();
+let demoFeedTimer: ReturnType<typeof setInterval> | null = null;
+let demoFeedCounter = 0;
 
 const reviewKey = (event: PullRequestEvent): string => `${event.platform}:${event.repoFullName}:${event.id}`;
 
@@ -129,6 +145,8 @@ const writeSseEvent = (response: Response, event: string | undefined, data: stri
 
   response.write("\n");
 };
+
+const pickCycle = <T>(values: readonly [T, ...T[]], index: number): T => values[index % values.length]!;
 
 const createDemoSeedReviews = (): DemoSeedReview[] => {
   const seeds: DemoSeedReview[] = [
@@ -353,10 +371,91 @@ const seedDemoStore = (): number => {
   const seeds = createDemoSeedReviews();
 
   reviewStore.clear();
+  demoFeedCounter = 0;
 
   for (const seed of seeds) {
-    saveReview(seed.event, seed.files, seed.result);
+    saveReview(
+      {
+        ...seed.event,
+        title: sanitizeDemoTitle(seed.event.title),
+        repoFullName: sanitizeDemoRepo(seed.event.repoFullName)
+      },
+      seed.files,
+      seed.result
+    );
   }
+
+  if (demoFeedTimer !== null) {
+    clearInterval(demoFeedTimer);
+  }
+
+  demoFeedTimer = setInterval(() => {
+    const index = demoFeedCounter++;
+    const reviewNumber = 106 + index;
+    const platform: PullRequestEvent["platform"] = index % 2 === 0 ? "github" : "gitlab";
+    const scoreOptions = [47, 63, 79, 86, 92] as const;
+    const titleOptions = [
+      "Stabilize webhook retries",
+      "Reduce bundle startup cost",
+      "Tighten cache invalidation",
+      "Guard file upload parsing",
+      "Normalize audit event payloads"
+    ] as const;
+    const repoOptions = ["acme/codesentinel", "acme/platform-api", "acme/billing"] as const;
+    const score = pickCycle(scoreOptions, index);
+    const critical = score < 60;
+    const title = sanitizeDemoTitle(pickCycle(titleOptions, index));
+    const repoFullName = sanitizeDemoRepo(pickCycle(repoOptions, index));
+
+    saveReview(
+      {
+        id: `demo-${reviewNumber}`,
+        title,
+        description: "Automatically generated live demo review.",
+        author: "demo-bot",
+        sourceBranch: `demo/live-${reviewNumber}`,
+        targetBranch: "main",
+        platform,
+        diffUrl: `https://example.com/demo-${reviewNumber}.diff`,
+        repoFullName
+      },
+      [
+        {
+          filename: "src/live-demo.ts",
+          patch: `-${reviewNumber}: const status = 'static'\n+${reviewNumber}: const status = 'live'`,
+          additions: 1,
+          deletions: 1,
+          language: "typescript",
+          changes: [
+            { type: "delete", oldLineNumber: reviewNumber, content: "const status = 'static'" },
+            { type: "add", newLineNumber: reviewNumber, content: "const status = 'live'" }
+          ]
+        }
+      ],
+      {
+        prId: `demo-${reviewNumber}`,
+        summary: critical
+          ? "Live demo review surfaced a blocking regression that needs attention."
+          : "Live demo review is healthy enough to keep moving without blocking the merge.",
+        issues: [
+          {
+            severity: critical ? "critical" : "warning",
+            category: critical ? "bug" : "style",
+            line: reviewNumber,
+            message: critical
+              ? "This live demo snapshot still shows a blocking risk that should be fixed first."
+              : "This live demo snapshot looks healthy, but there is still a small cleanup to consider.",
+            suggestion: critical
+              ? "Resolve the gating issue before merging and rerun the review engine."
+              : "Keep the implementation as-is and watch the trend for the next review.",
+            filename: "src/live-demo.ts"
+          }
+        ],
+        score,
+        processingMs: 700 + index * 45
+      }
+    );
+  }, 12_000);
 
   return seeds.length;
 };
@@ -442,6 +541,16 @@ export const createApp = (): express.Express => {
   app.use(cors());
   app.use(morgan("dev"));
   app.use("/api", express.json({ limit: "1mb" }));
+
+  app.use((request: Request, response: Response, next) => {
+    if (request.path === "/" || request.path === "/index.html" || request.path.endsWith(".js") || request.path.endsWith(".css")) {
+      response.setHeader("Cache-Control", "no-store, no-cache, must-revalidate, proxy-revalidate");
+      response.setHeader("Pragma", "no-cache");
+      response.setHeader("Expires", "0");
+    }
+
+    next();
+  });
 
   app.use("/webhooks/github", express.raw({ type: "application/json", limit: "2mb" }), createGithubRouter(reviewEngine));
   app.use("/webhooks/gitlab", express.json({ type: "application/json", limit: "2mb" }), createGitlabRouter(reviewEngine));
@@ -543,7 +652,7 @@ export const createApp = (): express.Express => {
 
   app.use(express.static(publicDirectory));
 
-  app.get("*", (_request: Request, response: Response) => {
+  app.get(/.*/, (_request: Request, response: Response) => {
     response.sendFile(path.join(publicDirectory, "index.html"));
   });
 
