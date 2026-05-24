@@ -31795,12 +31795,23 @@
                     /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { className: "font-medium text-slate-100", children: formatTimeAgo(activeReview.createdAt) })
                   ] })
                 ] }),
+                /* @__PURE__ */ (0, import_jsx_runtime.jsx)("style", { children: `.refresh-focus-button:hover { background: rgba(255,255,255,0.1) !important; }` }),
                 /* @__PURE__ */ (0, import_jsx_runtime.jsx)(
                   "button",
                   {
                     type: "button",
                     onClick: () => setActiveReviewKey(activeReview.key),
-                    className: "inline-flex w-full items-center justify-center rounded-2xl border border-white/10 bg-slate-950/70 px-4 py-3 text-sm font-semibold text-slate-100 transition hover:border-white/20 hover:bg-white/[0.06]",
+                    className: "refresh-focus-button",
+                    style: {
+                      width: "100%",
+                      height: "40px",
+                      border: "1px solid rgba(255,255,255,0.2)",
+                      borderRadius: "8px",
+                      background: "rgba(255,255,255,0.05)",
+                      color: "white",
+                      fontSize: "14px",
+                      cursor: "pointer"
+                    },
                     children: "Refresh focus"
                   }
                 ),
