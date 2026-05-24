@@ -11948,6 +11948,43 @@
     }
   });
 
+  // ../../node_modules/.pnpm/react@18.3.1/node_modules/react/cjs/react-jsx-runtime.production.min.js
+  var require_react_jsx_runtime_production_min = __commonJS({
+    "../../node_modules/.pnpm/react@18.3.1/node_modules/react/cjs/react-jsx-runtime.production.min.js"(exports) {
+      "use strict";
+      var f = require_react();
+      var k2 = /* @__PURE__ */ Symbol.for("react.element");
+      var l = /* @__PURE__ */ Symbol.for("react.fragment");
+      var m = Object.prototype.hasOwnProperty;
+      var n = f.__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED.ReactCurrentOwner;
+      var p = { key: true, ref: true, __self: true, __source: true };
+      function q(c2, a2, g) {
+        var b, d = {}, e = null, h = null;
+        void 0 !== g && (e = "" + g);
+        void 0 !== a2.key && (e = "" + a2.key);
+        void 0 !== a2.ref && (h = a2.ref);
+        for (b in a2) m.call(a2, b) && !p.hasOwnProperty(b) && (d[b] = a2[b]);
+        if (c2 && c2.defaultProps) for (b in a2 = c2.defaultProps, a2) void 0 === d[b] && (d[b] = a2[b]);
+        return { $$typeof: k2, type: c2, key: e, ref: h, props: d, _owner: n.current };
+      }
+      exports.Fragment = l;
+      exports.jsx = q;
+      exports.jsxs = q;
+    }
+  });
+
+  // ../../node_modules/.pnpm/react@18.3.1/node_modules/react/jsx-runtime.js
+  var require_jsx_runtime = __commonJS({
+    "../../node_modules/.pnpm/react@18.3.1/node_modules/react/jsx-runtime.js"(exports, module) {
+      "use strict";
+      if (true) {
+        module.exports = require_react_jsx_runtime_production_min();
+      } else {
+        module.exports = null;
+      }
+    }
+  });
+
   // src/frontend/main.tsx
   var import_client = __toESM(require_client(), 1);
 
@@ -21877,7 +21914,7 @@
   };
 
   // ../../node_modules/.pnpm/recharts@2.15.4_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/recharts/es6/shape/Curve.js
-  var React16 = __toESM(require_react());
+  var React15 = __toESM(require_react());
   var import_upperFirst3 = __toESM(require_upperFirst());
   var import_isFunction8 = __toESM(require_isFunction());
   function _typeof20(o) {
@@ -22024,7 +22061,7 @@
       return null;
     }
     var realPath = points && points.length ? getPath(props) : path2;
-    return /* @__PURE__ */ React16.createElement("path", _extends11({}, filterProps(props, false), adaptEventHandlers(props), {
+    return /* @__PURE__ */ React15.createElement("path", _extends11({}, filterProps(props, false), adaptEventHandlers(props), {
       className: clsx_default("recharts-curve", className),
       d: realPath,
       ref: pathRef
@@ -23791,7 +23828,7 @@
   };
 
   // ../../node_modules/.pnpm/recharts@2.15.4_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/recharts/es6/shape/Dot.js
-  var React19 = __toESM(require_react());
+  var React18 = __toESM(require_react());
   function _extends13() {
     _extends13 = Object.assign ? Object.assign.bind() : function(target) {
       for (var i = 1; i < arguments.length; i++) {
@@ -23810,7 +23847,7 @@
     var cx = props.cx, cy = props.cy, r2 = props.r, className = props.className;
     var layerClass = clsx_default("recharts-dot", className);
     if (cx === +cx && cy === +cy && r2 === +r2) {
-      return /* @__PURE__ */ React19.createElement("circle", _extends13({}, filterProps(props, false), adaptEventHandlers(props), {
+      return /* @__PURE__ */ React18.createElement("circle", _extends13({}, filterProps(props, false), adaptEventHandlers(props), {
         className: layerClass,
         cx,
         cy,
@@ -28554,7 +28591,7 @@
   });
 
   // ../../node_modules/.pnpm/recharts@2.15.4_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/recharts/es6/cartesian/XAxis.js
-  var React33 = __toESM(require_react());
+  var React32 = __toESM(require_react());
   function _typeof41(o) {
     "@babel/helpers - typeof";
     return _typeof41 = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function(o2) {
@@ -28678,7 +28715,7 @@
     }
     return (
       // @ts-expect-error the axisOptions type is not exactly what CartesianAxis is expecting.
-      /* @__PURE__ */ React33.createElement(CartesianAxis, _extends25({}, axisOptions, {
+      /* @__PURE__ */ React32.createElement(CartesianAxis, _extends25({}, axisOptions, {
         className: clsx_default("recharts-".concat(axisOptions.axisType, " ").concat(axisOptions.axisType), axisOptions.className),
         viewBox: {
           x: 0,
@@ -28701,10 +28738,10 @@
     return _createClass16(XAxis2, [{
       key: "render",
       value: function render() {
-        return /* @__PURE__ */ React33.createElement(XAxisImpl, this.props);
+        return /* @__PURE__ */ React32.createElement(XAxisImpl, this.props);
       }
     }]);
-  })(React33.Component);
+  })(React32.Component);
   _defineProperty37(XAxis, "displayName", "XAxis");
   _defineProperty37(XAxis, "defaultProps", {
     allowDecimals: true,
@@ -28727,7 +28764,7 @@
   });
 
   // ../../node_modules/.pnpm/recharts@2.15.4_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/recharts/es6/cartesian/YAxis.js
-  var React34 = __toESM(require_react());
+  var React33 = __toESM(require_react());
   function _typeof42(o) {
     "@babel/helpers - typeof";
     return _typeof42 = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function(o2) {
@@ -28851,7 +28888,7 @@
     }
     return (
       // @ts-expect-error the axisOptions type is not exactly what CartesianAxis is expecting.
-      /* @__PURE__ */ React34.createElement(CartesianAxis, _extends26({}, axisOptions, {
+      /* @__PURE__ */ React33.createElement(CartesianAxis, _extends26({}, axisOptions, {
         className: clsx_default("recharts-".concat(axisOptions.axisType, " ").concat(axisOptions.axisType), axisOptions.className),
         viewBox: {
           x: 0,
@@ -28874,10 +28911,10 @@
     return _createClass17(YAxis2, [{
       key: "render",
       value: function render() {
-        return /* @__PURE__ */ React34.createElement(YAxisImpl, this.props);
+        return /* @__PURE__ */ React33.createElement(YAxisImpl, this.props);
       }
     }]);
-  })(React34.Component);
+  })(React33.Component);
   _defineProperty38(YAxis, "displayName", "YAxis");
   _defineProperty38(YAxis, "defaultProps", {
     allowDuplicatedCategory: true,
@@ -31132,6 +31169,7 @@
   });
 
   // src/frontend/App.tsx
+  var import_jsx_runtime = __toESM(require_jsx_runtime(), 1);
   var scoreTone = (score) => {
     if (score > 80) {
       return {
@@ -31204,73 +31242,117 @@
     }
     return await response.json();
   };
-  var GitHubMark = () => /* @__PURE__ */ React.createElement("svg", { viewBox: "0 0 24 24", className: "h-4 w-4", "aria-hidden": "true", fill: "currentColor" }, /* @__PURE__ */ React.createElement("path", { d: "M12 2C6.5 2 2 6.5 2 12c0 4.4 2.9 8.1 6.9 9.5.5.1.7-.2.7-.5v-1.8c-2.8.6-3.4-1.2-3.4-1.2-.4-1-.9-1.3-.9-1.3-.8-.5.1-.5.1-.5.9.1 1.3.9 1.3.9.8 1.3 2.1.9 2.6.7.1-.6.3-1 .5-1.2-2.2-.3-4.5-1.1-4.5-4.8 0-1 .4-1.9 1-2.6-.1-.3-.4-1.2.1-2.5 0 0 .8-.2 2.6 1 1.6-.4 3.3-.4 4.9 0 1.8-1.2 2.6-1 2.6-1 .5 1.3.2 2.2.1 2.5.6.7 1 1.6 1 2.6 0 3.7-2.3 4.4-4.5 4.7.3.3.5.8.5 1.6v2.4c0 .3.2.6.7.5 4-1.4 6.9-5.1 6.9-9.5 0-5.5-4.5-10-10-10Z" }));
-  var GitLabMark = () => /* @__PURE__ */ React.createElement("svg", { viewBox: "0 0 24 24", className: "h-4 w-4", "aria-hidden": "true", fill: "currentColor" }, /* @__PURE__ */ React.createElement("path", { d: "m22 14.1-.5-1.5-2.2-6.8a.7.7 0 0 0-.7-.5.7.7 0 0 0-.7.5l-1.5 4.6H7.6L6.1 5.8a.7.7 0 0 0-1.4 0L2.5 12.6 2 14.1a.8.8 0 0 0 .3.8l9.6 7.2a.7.7 0 0 0 .9 0l9.6-7.2a.8.8 0 0 0 .3-.8Zm-10 6.4-7.9-5.9.3-1 1.8-5.5 1.8 5.4a.7.7 0 0 0 .7.5h10.8a.7.7 0 0 0 .7-.5l1.8-5.4 1.8 5.5.3 1-7.9 5.9Z" }));
-  var ShieldIcon = () => /* @__PURE__ */ React.createElement("svg", { viewBox: "0 0 24 24", className: "h-5 w-5", "aria-hidden": "true", fill: "currentColor" }, /* @__PURE__ */ React.createElement("path", { d: "M12 2 4 5.5V11c0 5.2 3.7 9.9 8 11 4.3-1.1 8-5.8 8-11V5.5L12 2Zm0 17.9c-2.9-.9-6-4.5-6-8.9V7.1L12 4.4l6 2.7V11c0 4.4-3.1 8-6 8.9Zm-1-4.9 5-5-1.4-1.4L11 13.7l-1.6-1.6L8 13.5l3 3 6-6L15.6 9l-4.6 5.1Z" }));
-  var LogoMark = () => /* @__PURE__ */ React.createElement("svg", { viewBox: "0 0 40 40", className: "h-11 w-11 shrink-0", "aria-hidden": "true" }, /* @__PURE__ */ React.createElement("defs", null, /* @__PURE__ */ React.createElement("linearGradient", { id: "codesentinel-gradient", x1: "0%", y1: "0%", x2: "100%", y2: "100%" }, /* @__PURE__ */ React.createElement("stop", { offset: "0%", stopColor: "#60a5fa" }), /* @__PURE__ */ React.createElement("stop", { offset: "55%", stopColor: "#34d399" }), /* @__PURE__ */ React.createElement("stop", { offset: "100%", stopColor: "#f59e0b" }))), /* @__PURE__ */ React.createElement("rect", { x: "3", y: "3", width: "34", height: "34", rx: "12", fill: "rgba(15, 23, 42, 0.85)", stroke: "url(#codesentinel-gradient)" }), /* @__PURE__ */ React.createElement(
-    "path",
-    {
-      d: "M12 23c4.2-1 6.8-4.2 8-9 1.2 4.8 3.8 8 8 9-4.2 1-6.8 4.2-8 9-1.2-4.8-3.8-8-8-9Z",
-      fill: "url(#codesentinel-gradient)",
-      opacity: "0.95"
-    }
-  ), /* @__PURE__ */ React.createElement("circle", { cx: "20", cy: "20", r: "3", fill: "#e2e8f0" }));
+  var GitHubMark = () => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("svg", { viewBox: "0 0 24 24", className: "h-4 w-4", "aria-hidden": "true", fill: "currentColor", children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("path", { d: "M12 2C6.5 2 2 6.5 2 12c0 4.4 2.9 8.1 6.9 9.5.5.1.7-.2.7-.5v-1.8c-2.8.6-3.4-1.2-3.4-1.2-.4-1-.9-1.3-.9-1.3-.8-.5.1-.5.1-.5.9.1 1.3.9 1.3.9.8 1.3 2.1.9 2.6.7.1-.6.3-1 .5-1.2-2.2-.3-4.5-1.1-4.5-4.8 0-1 .4-1.9 1-2.6-.1-.3-.4-1.2.1-2.5 0 0 .8-.2 2.6 1 1.6-.4 3.3-.4 4.9 0 1.8-1.2 2.6-1 2.6-1 .5 1.3.2 2.2.1 2.5.6.7 1 1.6 1 2.6 0 3.7-2.3 4.4-4.5 4.7.3.3.5.8.5 1.6v2.4c0 .3.2.6.7.5 4-1.4 6.9-5.1 6.9-9.5 0-5.5-4.5-10-10-10Z" }) });
+  var GitLabMark = () => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("svg", { viewBox: "0 0 24 24", className: "h-4 w-4", "aria-hidden": "true", fill: "currentColor", children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("path", { d: "m22 14.1-.5-1.5-2.2-6.8a.7.7 0 0 0-.7-.5.7.7 0 0 0-.7.5l-1.5 4.6H7.6L6.1 5.8a.7.7 0 0 0-1.4 0L2.5 12.6 2 14.1a.8.8 0 0 0 .3.8l9.6 7.2a.7.7 0 0 0 .9 0l9.6-7.2a.8.8 0 0 0 .3-.8Zm-10 6.4-7.9-5.9.3-1 1.8-5.5 1.8 5.4a.7.7 0 0 0 .7.5h10.8a.7.7 0 0 0 .7-.5l1.8-5.4 1.8 5.5.3 1-7.9 5.9Z" }) });
+  var ShieldIcon = () => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("svg", { viewBox: "0 0 24 24", className: "h-5 w-5", "aria-hidden": "true", fill: "currentColor", children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("path", { d: "M12 2 4 5.5V11c0 5.2 3.7 9.9 8 11 4.3-1.1 8-5.8 8-11V5.5L12 2Zm0 17.9c-2.9-.9-6-4.5-6-8.9V7.1L12 4.4l6 2.7V11c0 4.4-3.1 8-6 8.9Zm-1-4.9 5-5-1.4-1.4L11 13.7l-1.6-1.6L8 13.5l3 3 6-6L15.6 9l-4.6 5.1Z" }) });
+  var LogoMark = () => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("svg", { viewBox: "0 0 40 40", className: "h-11 w-11 shrink-0", "aria-hidden": "true", children: [
+    /* @__PURE__ */ (0, import_jsx_runtime.jsx)("defs", { children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("linearGradient", { id: "codesentinel-gradient", x1: "0%", y1: "0%", x2: "100%", y2: "100%", children: [
+      /* @__PURE__ */ (0, import_jsx_runtime.jsx)("stop", { offset: "0%", stopColor: "#60a5fa" }),
+      /* @__PURE__ */ (0, import_jsx_runtime.jsx)("stop", { offset: "55%", stopColor: "#34d399" }),
+      /* @__PURE__ */ (0, import_jsx_runtime.jsx)("stop", { offset: "100%", stopColor: "#f59e0b" })
+    ] }) }),
+    /* @__PURE__ */ (0, import_jsx_runtime.jsx)("rect", { x: "3", y: "3", width: "34", height: "34", rx: "12", fill: "rgba(15, 23, 42, 0.85)", stroke: "url(#codesentinel-gradient)" }),
+    /* @__PURE__ */ (0, import_jsx_runtime.jsx)(
+      "path",
+      {
+        d: "M12 23c4.2-1 6.8-4.2 8-9 1.2 4.8 3.8 8 8 9-4.2 1-6.8 4.2-8 9-1.2-4.8-3.8-8-8-9Z",
+        fill: "url(#codesentinel-gradient)",
+        opacity: "0.95"
+      }
+    ),
+    /* @__PURE__ */ (0, import_jsx_runtime.jsx)("circle", { cx: "20", cy: "20", r: "3", fill: "#e2e8f0" })
+  ] });
   var ScoreGauge = ({ score, size = 92, compact = false }) => {
     const tone = scoreTone(score);
     const strokeWidth = compact ? 7 : 8;
     const radius = (size - strokeWidth) / 2;
     const circumference = 2 * Math.PI * radius;
     const progress = circumference * (1 - Math.max(0, Math.min(100, score)) / 100);
-    return /* @__PURE__ */ React.createElement(
+    return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(
       "div",
       {
         className: "relative inline-flex items-center justify-center",
         style: { width: size, height: size },
-        "aria-label": `Quality score ${score} out of 100`
-      },
-      /* @__PURE__ */ React.createElement("svg", { width: size, height: size, viewBox: `0 0 ${size} ${size}`, className: "-rotate-90 drop-shadow-[0_0_18px_rgba(34,197,94,0.15)]" }, /* @__PURE__ */ React.createElement(
-        "circle",
-        {
-          cx: size / 2,
-          cy: size / 2,
-          r: radius,
-          fill: "none",
-          stroke: "rgba(148, 163, 184, 0.14)",
-          strokeWidth
-        }
-      ), /* @__PURE__ */ React.createElement(
-        "circle",
-        {
-          cx: size / 2,
-          cy: size / 2,
-          r: radius,
-          fill: "none",
-          stroke: tone.ring,
-          strokeWidth,
-          strokeLinecap: "round",
-          strokeDasharray: circumference,
-          strokeDashoffset: progress,
-          style: { transition: "stroke-dashoffset 300ms ease, stroke 300ms ease" }
-        }
-      )),
-      /* @__PURE__ */ React.createElement("div", { className: "absolute inset-0 flex flex-col items-center justify-center text-center" }, /* @__PURE__ */ React.createElement("span", { className: `text-xs font-semibold uppercase tracking-[0.28em] ${tone.text}` }, tone.label), /* @__PURE__ */ React.createElement("span", { className: "mt-1 text-2xl font-semibold tracking-tight text-slate-50" }, Math.round(score)), !compact && /* @__PURE__ */ React.createElement("span", { className: "text-[11px] text-slate-400" }, "quality score")),
-      /* @__PURE__ */ React.createElement("span", { className: "sr-only" }, score, " out of 100")
+        "aria-label": `Quality score ${score} out of 100`,
+        children: [
+          /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("svg", { width: size, height: size, viewBox: `0 0 ${size} ${size}`, className: "-rotate-90 drop-shadow-[0_0_18px_rgba(34,197,94,0.15)]", children: [
+            /* @__PURE__ */ (0, import_jsx_runtime.jsx)(
+              "circle",
+              {
+                cx: size / 2,
+                cy: size / 2,
+                r: radius,
+                fill: "none",
+                stroke: "rgba(148, 163, 184, 0.14)",
+                strokeWidth
+              }
+            ),
+            /* @__PURE__ */ (0, import_jsx_runtime.jsx)(
+              "circle",
+              {
+                cx: size / 2,
+                cy: size / 2,
+                r: radius,
+                fill: "none",
+                stroke: tone.ring,
+                strokeWidth,
+                strokeLinecap: "round",
+                strokeDasharray: circumference,
+                strokeDashoffset: progress,
+                style: { transition: "stroke-dashoffset 300ms ease, stroke 300ms ease" }
+              }
+            )
+          ] }),
+          /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { className: "absolute inset-0 flex flex-col items-center justify-center text-center", children: [
+            /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { className: `text-xs font-semibold uppercase tracking-[0.28em] ${tone.text}`, children: tone.label }),
+            /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { className: "mt-1 text-2xl font-semibold tracking-tight text-slate-50", children: Math.round(score) }),
+            !compact && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { className: "text-[11px] text-slate-400", children: "quality score" })
+          ] }),
+          /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", { className: "sr-only", children: [
+            score,
+            " out of 100"
+          ] })
+        ]
+      }
     );
   };
-  var MetricCard = ({ label, value, detail, tone, gaugeScore }) => /* @__PURE__ */ React.createElement("article", { className: `rounded-3xl border border-white/8 bg-white/[0.04] p-5 shadow-[0_22px_60px_rgba(2,6,23,0.35)] ${tone.surface}` }, /* @__PURE__ */ React.createElement("div", { className: "flex items-start justify-between gap-4" }, /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("p", { className: "text-xs font-medium uppercase tracking-[0.26em] text-slate-400" }, label), /* @__PURE__ */ React.createElement("p", { className: "mt-3 text-3xl font-semibold tracking-tight text-slate-50" }, value), /* @__PURE__ */ React.createElement("p", { className: "mt-2 text-sm leading-6 text-slate-400" }, detail)), typeof gaugeScore === "number" ? /* @__PURE__ */ React.createElement(ScoreGauge, { score: gaugeScore, size: 76, compact: true }) : null));
+  var MetricCard = ({ label, value, detail, tone, gaugeScore }) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("article", { className: `rounded-3xl border border-white/8 bg-white/[0.04] p-5 shadow-[0_22px_60px_rgba(2,6,23,0.35)] ${tone.surface}`, children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { className: "flex items-start justify-between gap-4", children: [
+    /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [
+      /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", { className: "text-xs font-medium uppercase tracking-[0.26em] text-slate-400", children: label }),
+      /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", { className: "mt-3 text-3xl font-semibold tracking-tight text-slate-50", children: value }),
+      /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", { className: "mt-2 text-sm leading-6 text-slate-400", children: detail })
+    ] }),
+    typeof gaugeScore === "number" ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ScoreGauge, { score: gaugeScore, size: 76, compact: true }) : null
+  ] }) });
   var PlatformBadge = ({ platform }) => {
     const tone = platformTone[platform];
     const Icon = platform === "github" ? GitHubMark : GitLabMark;
-    return /* @__PURE__ */ React.createElement("span", { className: `inline-flex items-center gap-2 rounded-full border px-3 py-1 text-xs font-medium ${tone.bg} ${tone.border} ${tone.accent}` }, /* @__PURE__ */ React.createElement(Icon, null), tone.label);
+    return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", { className: `inline-flex items-center gap-2 rounded-full border px-3 py-1 text-xs font-medium ${tone.bg} ${tone.border} ${tone.accent}`, children: [
+      /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Icon, {}),
+      tone.label
+    ] });
   };
   var ScoreBadge = ({ score }) => {
     const tone = scoreTone(score);
-    return /* @__PURE__ */ React.createElement("div", { className: "inline-flex items-center gap-3 rounded-full border border-white/8 bg-slate-950/60 px-3 py-2" }, /* @__PURE__ */ React.createElement(ScoreGauge, { score, size: 40, compact: true }), /* @__PURE__ */ React.createElement("div", { className: "leading-tight" }, /* @__PURE__ */ React.createElement("div", { className: `text-sm font-semibold ${tone.text}` }, tone.label), /* @__PURE__ */ React.createElement("div", { className: "text-xs text-slate-400" }, Math.round(score), "/100")));
+    return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(
+      "div",
+      {
+        className: "inline-flex items-center gap-2 rounded-full border border-white/8 bg-slate-950/60 px-3 py-2",
+        "aria-label": `Quality score ${Math.round(score)} out of 100`,
+        children: [
+          /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { className: "h-2.5 w-2.5 rounded-full", style: { backgroundColor: tone.ring }, "aria-hidden": "true" }),
+          /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { className: "text-sm font-semibold text-slate-100", children: Math.round(score) })
+        ]
+      }
+    );
   };
   var PlatformPill = ({ platform }) => {
     const tone = platformTone[platform];
     const Icon = platform === "github" ? GitHubMark : GitLabMark;
-    return /* @__PURE__ */ React.createElement("span", { className: `inline-flex items-center gap-2 rounded-full border px-2.5 py-1 text-xs font-medium ${tone.bg} ${tone.border} ${tone.accent}` }, /* @__PURE__ */ React.createElement(Icon, null), tone.label);
+    return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", { className: `inline-flex items-center gap-2 rounded-full border px-2.5 py-1 text-xs font-medium ${tone.bg} ${tone.border} ${tone.accent}`, children: [
+      /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Icon, {}),
+      tone.label
+    ] });
   };
   var ChartTooltip = ({ active, payload }) => {
     if (!active || !payload?.length) {
@@ -31278,7 +31360,14 @@
     }
     const score = Number(payload[0]?.value ?? 0);
     const createdAt = payload[0]?.payload?.createdAt ?? "";
-    return /* @__PURE__ */ React.createElement("div", { className: "rounded-2xl border border-white/10 bg-slate-950/95 px-4 py-3 shadow-2xl backdrop-blur" }, /* @__PURE__ */ React.createElement("p", { className: "text-xs uppercase tracking-[0.22em] text-slate-400" }, "Score trend"), /* @__PURE__ */ React.createElement("p", { className: "mt-1 text-lg font-semibold text-slate-50" }, Math.round(score), "/100"), /* @__PURE__ */ React.createElement("p", { className: "text-sm text-slate-400" }, formatTimeAgo(createdAt)));
+    return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { className: "rounded-2xl border border-white/10 bg-slate-950/95 px-4 py-3 shadow-2xl backdrop-blur", children: [
+      /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", { className: "text-xs uppercase tracking-[0.22em] text-slate-400", children: "Score trend" }),
+      /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("p", { className: "mt-1 text-lg font-semibold text-slate-50", children: [
+        Math.round(score),
+        "/100"
+      ] }),
+      /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", { className: "text-sm text-slate-400", children: formatTimeAgo(createdAt) })
+    ] });
   };
   function App() {
     const [reviews, setReviews] = (0, import_react35.useState)([]);
@@ -31459,128 +31548,348 @@
         sourceRef.current = null;
       });
     };
-    return /* @__PURE__ */ React.createElement("div", { className: "min-h-screen bg-slate-950 text-slate-100" }, /* @__PURE__ */ React.createElement("div", { className: "pointer-events-none fixed inset-0 bg-[radial-gradient(circle_at_top_left,_rgba(59,130,246,0.16),_transparent_30%),radial-gradient(circle_at_top_right,_rgba(34,197,94,0.12),_transparent_24%),radial-gradient(circle_at_80%_20%,_rgba(245,158,11,0.14),_transparent_28%)]" }), /* @__PURE__ */ React.createElement("div", { className: "pointer-events-none fixed inset-0 opacity-[0.28] [background-image:linear-gradient(rgba(148,163,184,0.08)_1px,transparent_1px),linear-gradient(90deg,rgba(148,163,184,0.08)_1px,transparent_1px)] [background-size:60px_60px] [mask-image:radial-gradient(circle_at_center,black_42%,transparent_84%)]" }), /* @__PURE__ */ React.createElement("main", { className: "relative mx-auto flex min-h-screen w-full max-w-[1520px] flex-col gap-6 px-4 py-5 sm:px-6 lg:px-8 lg:py-8" }, /* @__PURE__ */ React.createElement("header", { className: "rounded-[32px] border border-white/8 bg-slate-950/70 px-5 py-5 shadow-[0_30px_120px_rgba(2,6,23,0.35)] backdrop-blur-xl sm:px-7 sm:py-6" }, /* @__PURE__ */ React.createElement("div", { className: "flex flex-col gap-6 xl:flex-row xl:items-end xl:justify-between" }, /* @__PURE__ */ React.createElement("div", { className: "max-w-3xl" }, /* @__PURE__ */ React.createElement("div", { className: "flex items-center gap-4" }, /* @__PURE__ */ React.createElement(LogoMark, null), /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("p", { className: "text-xs font-semibold uppercase tracking-[0.32em] text-cyan-300/90" }, "CodeSentinel"), /* @__PURE__ */ React.createElement("h1", { className: "mt-2 text-3xl font-semibold tracking-tight text-slate-50 sm:text-4xl" }, "AI code reviews, instantly"))), /* @__PURE__ */ React.createElement("p", { className: "mt-4 max-w-2xl text-sm leading-7 text-slate-400 sm:text-[15px]" }, "A polished review cockpit for GitHub and GitLab pull requests, with live quality telemetry, issue trends, and automated guidance powered by Gemini 2.5 Flash.")), /* @__PURE__ */ React.createElement("div", { className: "flex flex-wrap items-center gap-3" }, /* @__PURE__ */ React.createElement(PlatformBadge, { platform: "github" }), /* @__PURE__ */ React.createElement(PlatformBadge, { platform: "gitlab" }), /* @__PURE__ */ React.createElement("span", { className: "inline-flex items-center rounded-full border border-cyan-400/20 bg-cyan-400/10 px-3 py-1 text-xs font-medium text-cyan-200" }, "Powered by Gemini 2.5 Flash")))), /* @__PURE__ */ React.createElement("section", { className: "grid gap-4 md:grid-cols-2 xl:grid-cols-4" }, /* @__PURE__ */ React.createElement(
-      MetricCard,
-      {
-        label: "Total Reviews",
-        value: isLoading ? "\u2026" : formatCompactNumber(metrics.totalReviews),
-        detail: "Incoming pull requests processed in the live feed.",
-        tone: scoreTone(88)
-      }
-    ), /* @__PURE__ */ React.createElement(
-      MetricCard,
-      {
-        label: "Avg Quality Score",
-        value: isLoading ? "\u2026" : `${metrics.avgQualityScore}`,
-        detail: "Rolling average across the current review window.",
-        tone: scoreTone(metrics.avgQualityScore),
-        gaugeScore: metrics.avgQualityScore
-      }
-    ), /* @__PURE__ */ React.createElement(
-      MetricCard,
-      {
-        label: "Issues Found",
-        value: isLoading ? "\u2026" : formatCompactNumber(metrics.issuesFound),
-        detail: "Total findings surfaced by the review engine.",
-        tone: scoreTone(metrics.avgQualityScore)
-      }
-    ), /* @__PURE__ */ React.createElement(
-      MetricCard,
-      {
-        label: "Critical Issues",
-        value: isLoading ? "\u2026" : formatCompactNumber(metrics.criticalIssues),
-        detail: "Blocking risks that deserve immediate attention.",
-        tone: scoreTone(metrics.criticalIssues > 0 ? 55 : 90)
-      }
-    )), /* @__PURE__ */ React.createElement("section", { className: "grid gap-6 xl:grid-cols-[minmax(0,1.6fr)_minmax(340px,0.88fr)]" }, /* @__PURE__ */ React.createElement("div", { className: "space-y-6" }, /* @__PURE__ */ React.createElement("article", { className: "overflow-hidden rounded-[30px] border border-white/8 bg-slate-950/70 shadow-[0_30px_90px_rgba(2,6,23,0.28)] backdrop-blur-xl" }, /* @__PURE__ */ React.createElement("div", { className: "flex items-center justify-between gap-4 border-b border-white/6 px-5 py-5 sm:px-6" }, /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("p", { className: "text-xs font-semibold uppercase tracking-[0.3em] text-slate-400" }, "Score trend"), /* @__PURE__ */ React.createElement("h2", { className: "mt-2 text-xl font-semibold tracking-tight text-slate-50" }, "Review quality over time")), lastUpdated ? /* @__PURE__ */ React.createElement("span", { className: "text-sm text-slate-400" }, "Updated ", formatTimeAgo(lastUpdated)) : null), /* @__PURE__ */ React.createElement("div", { className: "h-[260px] px-3 py-4 sm:px-5" }, trendData.length > 0 ? /* @__PURE__ */ React.createElement(ResponsiveContainer, { width: "100%", height: "100%" }, /* @__PURE__ */ React.createElement(AreaChart, { data: trendData, margin: { top: 10, right: 12, left: -8, bottom: 0 } }, /* @__PURE__ */ React.createElement("defs", null, /* @__PURE__ */ React.createElement("linearGradient", { id: "scoreGradient", x1: "0", y1: "0", x2: "0", y2: "1" }, /* @__PURE__ */ React.createElement("stop", { offset: "0%", stopColor: "#38bdf8", stopOpacity: 0.38 }), /* @__PURE__ */ React.createElement("stop", { offset: "75%", stopColor: "#38bdf8", stopOpacity: 0.03 }))), /* @__PURE__ */ React.createElement(CartesianGrid, { stroke: "rgba(148, 163, 184, 0.14)", strokeDasharray: "3 6", vertical: false }), /* @__PURE__ */ React.createElement(
-      XAxis,
-      {
-        dataKey: "label",
-        tickLine: false,
-        axisLine: false,
-        interval: "preserveStartEnd",
-        tick: { fill: "#94a3b8", fontSize: 12 }
-      }
-    ), /* @__PURE__ */ React.createElement(
-      YAxis,
-      {
-        domain: [0, 100],
-        tickCount: 6,
-        tickLine: false,
-        axisLine: false,
-        tick: { fill: "#94a3b8", fontSize: 12 }
-      }
-    ), /* @__PURE__ */ React.createElement(Tooltip, { content: /* @__PURE__ */ React.createElement(ChartTooltip, null) }), /* @__PURE__ */ React.createElement(Area, { type: "monotone", dataKey: "score", stroke: "#38bdf8", strokeWidth: 3, fill: "url(#scoreGradient)" }))) : /* @__PURE__ */ React.createElement("div", { className: "flex h-full items-center justify-center rounded-3xl border border-dashed border-white/10 bg-white/[0.02] text-sm text-slate-400" }, "Score history will appear here after the first review lands."))), /* @__PURE__ */ React.createElement("article", { className: "overflow-hidden rounded-[30px] border border-white/8 bg-slate-950/70 shadow-[0_30px_90px_rgba(2,6,23,0.28)] backdrop-blur-xl" }, /* @__PURE__ */ React.createElement("div", { className: "flex flex-col gap-3 border-b border-white/6 px-5 py-5 sm:flex-row sm:items-end sm:justify-between sm:px-6" }, /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("p", { className: "text-xs font-semibold uppercase tracking-[0.3em] text-slate-400" }, "Recent reviews"), /* @__PURE__ */ React.createElement("h2", { className: "mt-2 text-xl font-semibold tracking-tight text-slate-50" }, "Live pull request feed")), /* @__PURE__ */ React.createElement("p", { className: "text-sm text-slate-400" }, "Polling every 10 seconds")), error ? /* @__PURE__ */ React.createElement("div", { className: "border-b border-rose-400/15 bg-rose-500/10 px-5 py-3 text-sm text-rose-200 sm:px-6" }, error) : null, /* @__PURE__ */ React.createElement("div", { className: "overflow-x-auto" }, /* @__PURE__ */ React.createElement("table", { className: "min-w-full divide-y divide-white/6 text-left" }, /* @__PURE__ */ React.createElement("thead", { className: "bg-white/[0.02] text-xs uppercase tracking-[0.22em] text-slate-400" }, /* @__PURE__ */ React.createElement("tr", null, /* @__PURE__ */ React.createElement("th", { className: "px-5 py-4 font-medium sm:px-6" }, "Repo"), /* @__PURE__ */ React.createElement("th", { className: "px-5 py-4 font-medium sm:px-6" }, "Pull Request"), /* @__PURE__ */ React.createElement("th", { className: "px-5 py-4 font-medium sm:px-6" }, "Platform"), /* @__PURE__ */ React.createElement("th", { className: "px-5 py-4 font-medium sm:px-6" }, "Score"), /* @__PURE__ */ React.createElement("th", { className: "px-5 py-4 font-medium sm:px-6" }, "Issues"), /* @__PURE__ */ React.createElement("th", { className: "px-5 py-4 font-medium sm:px-6" }, "Updated"), /* @__PURE__ */ React.createElement("th", { className: "px-5 py-4 font-medium sm:px-6 text-right" }, "Action"))), /* @__PURE__ */ React.createElement("tbody", { className: "divide-y divide-white/6" }, sortedReviews.length > 0 ? sortedReviews.map((review) => {
-      const tone = scoreTone(review.score);
-      const isActive = activeReview?.key === review.key;
-      return /* @__PURE__ */ React.createElement(
-        "tr",
-        {
-          key: review.key,
-          className: `transition-colors ${isActive ? "bg-cyan-500/5" : "hover:bg-white/[0.03]"}`
-        },
-        /* @__PURE__ */ React.createElement("td", { className: "px-5 py-4 align-top sm:px-6" }, /* @__PURE__ */ React.createElement("div", { className: "max-w-[240px]" }, /* @__PURE__ */ React.createElement("p", { className: "truncate font-medium text-slate-50" }, review.repoFullName), /* @__PURE__ */ React.createElement("p", { className: "mt-1 text-xs text-slate-400" }, review.author))),
-        /* @__PURE__ */ React.createElement("td", { className: "px-5 py-4 align-top sm:px-6" }, /* @__PURE__ */ React.createElement("div", { className: "max-w-[320px]" }, /* @__PURE__ */ React.createElement("p", { className: "font-medium text-slate-50" }, review.title), /* @__PURE__ */ React.createElement("p", { className: "mt-1 text-xs text-slate-400" }, review.sourceBranch, " \u2192 ", review.targetBranch))),
-        /* @__PURE__ */ React.createElement("td", { className: "px-5 py-4 align-top sm:px-6" }, /* @__PURE__ */ React.createElement(PlatformPill, { platform: review.platform })),
-        /* @__PURE__ */ React.createElement("td", { className: "px-5 py-4 align-top sm:px-6" }, /* @__PURE__ */ React.createElement(ScoreBadge, { score: review.score })),
-        /* @__PURE__ */ React.createElement("td", { className: "px-5 py-4 align-top sm:px-6" }, /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("p", { className: "text-sm font-medium text-slate-100" }, review.issueCount, " issues"), /* @__PURE__ */ React.createElement("p", { className: `mt-1 text-xs ${tone.text}` }, review.criticalIssueCount, " critical"))),
-        /* @__PURE__ */ React.createElement("td", { className: "px-5 py-4 align-top text-sm text-slate-400 sm:px-6" }, formatTimeAgo(review.createdAt)),
-        /* @__PURE__ */ React.createElement("td", { className: "px-5 py-4 align-top text-right sm:px-6" }, /* @__PURE__ */ React.createElement(
-          "button",
-          {
-            type: "button",
-            onClick: () => setActiveReviewKey(review.key),
-            className: "inline-flex items-center rounded-full border border-white/10 bg-white/[0.04] px-4 py-2 text-sm font-medium text-slate-100 transition hover:border-cyan-400/40 hover:bg-cyan-400/10 hover:text-cyan-100"
-          },
-          "View Details"
-        ))
-      );
-    }) : /* @__PURE__ */ React.createElement("tr", null, /* @__PURE__ */ React.createElement("td", { className: "px-5 py-10 text-center text-sm text-slate-400 sm:px-6", colSpan: 7 }, isLoading ? "Loading live review feed..." : "No reviews yet. Push a webhook to populate the dashboard."))))))), /* @__PURE__ */ React.createElement("aside", { className: "space-y-6" }, /* @__PURE__ */ React.createElement("article", { className: "rounded-[30px] border border-white/8 bg-slate-950/70 p-5 shadow-[0_30px_90px_rgba(2,6,23,0.28)] backdrop-blur-xl sm:p-6" }, /* @__PURE__ */ React.createElement("div", { className: "flex items-start justify-between gap-4" }, /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("p", { className: "text-xs font-semibold uppercase tracking-[0.3em] text-slate-400" }, "Selected review"), /* @__PURE__ */ React.createElement("h2", { className: "mt-2 text-xl font-semibold tracking-tight text-slate-50" }, activeReview?.title ?? "Choose a review")), activeReview ? /* @__PURE__ */ React.createElement(PlatformPill, { platform: activeReview.platform }) : null), activeReview ? /* @__PURE__ */ React.createElement("div", { className: "mt-6 space-y-6" }, /* @__PURE__ */ React.createElement("div", { className: "flex items-center gap-5" }, /* @__PURE__ */ React.createElement(ScoreGauge, { score: activeReview.score, size: 116 }), /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("p", { className: "text-sm text-slate-400" }, activeReview.repoFullName), /* @__PURE__ */ React.createElement("p", { className: "mt-2 text-sm leading-7 text-slate-300" }, activeReview.summary))), /* @__PURE__ */ React.createElement("div", { className: "grid gap-3 rounded-3xl border border-white/8 bg-white/[0.03] p-4 text-sm text-slate-300" }, /* @__PURE__ */ React.createElement("div", { className: "flex items-center justify-between gap-4" }, /* @__PURE__ */ React.createElement("span", { className: "text-slate-400" }, "Pull request"), /* @__PURE__ */ React.createElement("span", { className: "font-medium text-slate-100" }, "#", activeReview.prId)), /* @__PURE__ */ React.createElement("div", { className: "flex items-center justify-between gap-4" }, /* @__PURE__ */ React.createElement("span", { className: "text-slate-400" }, "Issues found"), /* @__PURE__ */ React.createElement("span", { className: "font-medium text-slate-100" }, activeReview.issueCount)), /* @__PURE__ */ React.createElement("div", { className: "flex items-center justify-between gap-4" }, /* @__PURE__ */ React.createElement("span", { className: "text-slate-400" }, "Critical issues"), /* @__PURE__ */ React.createElement("span", { className: "font-medium text-slate-100" }, activeReview.criticalIssueCount)), /* @__PURE__ */ React.createElement("div", { className: "flex items-center justify-between gap-4" }, /* @__PURE__ */ React.createElement("span", { className: "text-slate-400" }, "Branches"), /* @__PURE__ */ React.createElement("span", { className: "max-w-[220px] truncate font-medium text-slate-100" }, activeReview.sourceBranch, " \u2192 ", activeReview.targetBranch)), /* @__PURE__ */ React.createElement("div", { className: "flex items-center justify-between gap-4" }, /* @__PURE__ */ React.createElement("span", { className: "text-slate-400" }, "Updated"), /* @__PURE__ */ React.createElement("span", { className: "font-medium text-slate-100" }, formatTimeAgo(activeReview.createdAt)))), /* @__PURE__ */ React.createElement(
-      "button",
-      {
-        type: "button",
-        onClick: () => setActiveReviewKey(activeReview.key),
-        className: "inline-flex w-full items-center justify-center rounded-2xl bg-gradient-to-r from-cyan-400 to-emerald-400 px-4 py-3 text-sm font-semibold text-slate-950 transition hover:brightness-110"
-      },
-      "Refresh focus"
-    ), activeReviewDetail?.mergeRecommendation ? /* @__PURE__ */ React.createElement(
-      "div",
-      {
-        className: `rounded-[28px] border px-5 py-4 shadow-[0_22px_60px_rgba(2,6,23,0.35)] ${mergeVerdictTone(activeReviewDetail.mergeRecommendation.verdict).bg} ${mergeVerdictTone(activeReviewDetail.mergeRecommendation.verdict).border}`
-      },
-      /* @__PURE__ */ React.createElement("div", { className: "flex items-start gap-3" }, /* @__PURE__ */ React.createElement("div", { className: `mt-0.5 rounded-2xl border border-white/10 p-2 ${mergeVerdictTone(activeReviewDetail.mergeRecommendation.verdict).text}` }, /* @__PURE__ */ React.createElement(ShieldIcon, null)), /* @__PURE__ */ React.createElement("div", { className: "min-w-0 flex-1" }, /* @__PURE__ */ React.createElement("p", { className: "text-xs font-semibold uppercase tracking-[0.28em] text-slate-400" }, "Merge readiness"), /* @__PURE__ */ React.createElement("div", { className: "mt-2 flex flex-wrap items-center gap-3" }, /* @__PURE__ */ React.createElement("h3", { className: `text-xl font-semibold tracking-tight ${mergeVerdictTone(activeReviewDetail.mergeRecommendation.verdict).text}` }, mergeVerdictTone(activeReviewDetail.mergeRecommendation.verdict).label), /* @__PURE__ */ React.createElement("span", { className: "rounded-full border border-white/10 bg-white/[0.06] px-3 py-1 text-xs font-medium text-slate-200" }, "Confidence ", activeReviewDetail.mergeRecommendation.confidence, "/100")), activeReviewDetail.mergeRecommendation.blockers.length > 0 ? /* @__PURE__ */ React.createElement("p", { className: "mt-3 text-sm leading-6 text-slate-200" }, "Blockers: ", activeReviewDetail.mergeRecommendation.blockers.join("; ")) : null, activeReviewDetail.mergeRecommendation.quickWins.length > 0 ? /* @__PURE__ */ React.createElement("p", { className: "mt-2 text-sm leading-6 text-slate-300" }, "Quick wins: ", activeReviewDetail.mergeRecommendation.quickWins.join("; ")) : null))
-    ) : null, /* @__PURE__ */ React.createElement("div", { className: "space-y-3" }, /* @__PURE__ */ React.createElement("div", { className: "flex items-center justify-between gap-4" }, /* @__PURE__ */ React.createElement("h3", { className: "text-sm font-semibold uppercase tracking-[0.28em] text-slate-400" }, "Issue cards"), detailLoading ? /* @__PURE__ */ React.createElement("span", { className: "text-xs text-slate-500" }, "Loading details...") : null), detailError ? /* @__PURE__ */ React.createElement("div", { className: "rounded-2xl border border-rose-400/20 bg-rose-500/10 px-4 py-3 text-sm text-rose-200" }, detailError) : null, /* @__PURE__ */ React.createElement("div", { className: "space-y-3" }, (activeReviewDetail?.result.issues ?? []).length > 0 ? activeReviewDetail?.result.issues.map((issue, index) => /* @__PURE__ */ React.createElement("article", { key: `${issue.filename}:${issue.line}:${index}`, className: "rounded-3xl border border-white/8 bg-white/[0.03] p-4" }, /* @__PURE__ */ React.createElement("div", { className: "flex flex-col gap-3 lg:flex-row lg:items-start lg:justify-between" }, /* @__PURE__ */ React.createElement("div", { className: "space-y-2" }, /* @__PURE__ */ React.createElement("div", { className: "flex flex-wrap items-center gap-2" }, /* @__PURE__ */ React.createElement("span", { className: "rounded-full border border-white/8 bg-white/[0.04] px-2.5 py-1 text-[11px] font-semibold uppercase tracking-[0.22em] text-slate-300" }, issue.severity), /* @__PURE__ */ React.createElement("span", { className: "rounded-full border border-white/8 bg-white/[0.04] px-2.5 py-1 text-[11px] font-semibold uppercase tracking-[0.22em] text-slate-400" }, issue.category)), /* @__PURE__ */ React.createElement("p", { className: "text-sm font-medium text-slate-100" }, issue.message), /* @__PURE__ */ React.createElement("p", { className: "text-xs text-slate-400" }, issue.filename, " \xB7 line ", issue.line), /* @__PURE__ */ React.createElement("p", { className: "text-sm leading-6 text-slate-300" }, issue.suggestion)), /* @__PURE__ */ React.createElement(
-      "button",
-      {
-        type: "button",
-        onClick: () => explainIssue(index, issue),
-        className: "inline-flex shrink-0 items-center justify-center rounded-full border border-cyan-400/25 bg-cyan-400/10 px-4 py-2 text-sm font-medium text-cyan-100 transition hover:border-cyan-300/50 hover:bg-cyan-400/15"
-      },
-      "Explain this \u2726"
-    )))) : /* @__PURE__ */ React.createElement("div", { className: "rounded-3xl border border-dashed border-white/10 bg-white/[0.02] px-4 py-6 text-sm text-slate-400" }, detailLoading ? "Loading issue details..." : "No issue details available for this review.")))) : /* @__PURE__ */ React.createElement("div", { className: "mt-6 rounded-3xl border border-dashed border-white/10 bg-white/[0.02] p-6 text-sm leading-7 text-slate-400" }, "The selected review detail panel will populate once the dashboard receives data.")), /* @__PURE__ */ React.createElement("article", { className: "rounded-[30px] border border-white/8 bg-slate-950/70 p-5 shadow-[0_30px_90px_rgba(2,6,23,0.28)] backdrop-blur-xl sm:p-6" }, /* @__PURE__ */ React.createElement("p", { className: "text-xs font-semibold uppercase tracking-[0.3em] text-slate-400" }, "Live signal"), /* @__PURE__ */ React.createElement("div", { className: "mt-4 flex items-center gap-4" }, /* @__PURE__ */ React.createElement("div", { className: "rounded-3xl border border-white/8 bg-white/[0.03] p-4" }, /* @__PURE__ */ React.createElement("div", { className: "text-xs uppercase tracking-[0.2em] text-slate-500" }, "Current avg"), /* @__PURE__ */ React.createElement("div", { className: "mt-2 text-3xl font-semibold tracking-tight text-slate-50" }, metrics.avgQualityScore)), /* @__PURE__ */ React.createElement("div", { className: "space-y-2 text-sm text-slate-400" }, /* @__PURE__ */ React.createElement("p", null, "Scores above 80 stay in the green band."), /* @__PURE__ */ React.createElement("p", null, "60-80 is yellow, below 60 is flagged red.")))))), explainOpen ? /* @__PURE__ */ React.createElement("div", { className: "fixed inset-0 z-50 flex items-end justify-center bg-slate-950/70 p-4 backdrop-blur-sm sm:items-center" }, /* @__PURE__ */ React.createElement("div", { className: "w-full max-w-3xl overflow-hidden rounded-[32px] border border-white/10 bg-slate-950 shadow-[0_30px_120px_rgba(0,0,0,0.55)]" }, /* @__PURE__ */ React.createElement("div", { className: "flex items-start justify-between gap-4 border-b border-white/8 px-5 py-4 sm:px-6" }, /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("p", { className: "text-xs font-semibold uppercase tracking-[0.28em] text-cyan-300" }, "Explain this issue"), /* @__PURE__ */ React.createElement("h3", { className: "mt-2 text-lg font-semibold tracking-tight text-slate-50" }, explainTitle)), /* @__PURE__ */ React.createElement(
-      "button",
-      {
-        type: "button",
-        onClick: () => {
-          stopExplanation();
-          setExplainOpen(false);
-          setExplainStatus("idle");
-          setExplainText("");
-        },
-        className: "rounded-full border border-white/10 bg-white/[0.04] px-3 py-2 text-sm text-slate-200 transition hover:bg-white/[0.08]"
-      },
-      "Close"
-    )), /* @__PURE__ */ React.createElement("div", { className: "max-h-[70vh] overflow-y-auto px-5 py-5 sm:px-6" }, /* @__PURE__ */ React.createElement("div", { className: "rounded-[28px] border border-white/8 bg-white/[0.03] p-5 text-sm leading-7 text-slate-200 whitespace-pre-wrap" }, explainText.length > 0 ? explainText : explainStatus === "streaming" ? "Starting explanation..." : "No explanation yet."), /* @__PURE__ */ React.createElement("div", { className: "mt-4 text-xs uppercase tracking-[0.26em] text-slate-500" }, explainStatus === "streaming" ? "Gemini is streaming the explanation" : explainStatus === "done" ? "Explanation complete" : explainStatus === "error" ? "Stream interrupted" : "Idle")))) : null));
+    return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { className: "min-h-screen bg-slate-950 text-slate-100", children: [
+      /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "pointer-events-none fixed inset-0 bg-[radial-gradient(circle_at_top_left,_rgba(59,130,246,0.16),_transparent_30%),radial-gradient(circle_at_top_right,_rgba(34,197,94,0.12),_transparent_24%),radial-gradient(circle_at_80%_20%,_rgba(245,158,11,0.14),_transparent_28%)]" }),
+      /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "pointer-events-none fixed inset-0 opacity-[0.28] [background-image:linear-gradient(rgba(148,163,184,0.08)_1px,transparent_1px),linear-gradient(90deg,rgba(148,163,184,0.08)_1px,transparent_1px)] [background-size:60px_60px] [mask-image:radial-gradient(circle_at_center,black_42%,transparent_84%)]" }),
+      /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("main", { className: "relative mx-auto flex min-h-screen w-full max-w-[1520px] flex-col gap-6 px-4 py-5 sm:px-6 lg:px-8 lg:py-8", children: [
+        /* @__PURE__ */ (0, import_jsx_runtime.jsx)("header", { className: "rounded-[32px] border border-white/8 bg-slate-950/70 px-5 py-5 shadow-[0_30px_120px_rgba(2,6,23,0.35)] backdrop-blur-xl sm:px-7 sm:py-6", children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { className: "flex flex-col gap-6 xl:flex-row xl:items-end xl:justify-between", children: [
+          /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { className: "max-w-3xl", children: [
+            /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { className: "flex items-center gap-4", children: [
+              /* @__PURE__ */ (0, import_jsx_runtime.jsx)(LogoMark, {}),
+              /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [
+                /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", { className: "text-xs font-semibold uppercase tracking-[0.32em] text-cyan-300/90", children: "CodeSentinel" }),
+                /* @__PURE__ */ (0, import_jsx_runtime.jsx)("h1", { className: "mt-2 text-3xl font-semibold tracking-tight text-slate-50 sm:text-4xl", children: "AI code reviews, instantly" })
+              ] })
+            ] }),
+            /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", { className: "mt-4 max-w-2xl text-sm leading-7 text-slate-400 sm:text-[15px]", children: "A polished review cockpit for GitHub and GitLab pull requests, with live quality telemetry, issue trends, and automated guidance powered by Gemini 2.5 Flash." })
+          ] }),
+          /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { className: "flex flex-wrap items-center gap-3", children: [
+            /* @__PURE__ */ (0, import_jsx_runtime.jsx)(PlatformBadge, { platform: "github" }),
+            /* @__PURE__ */ (0, import_jsx_runtime.jsx)(PlatformBadge, { platform: "gitlab" }),
+            /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { className: "inline-flex items-center rounded-full border border-cyan-400/20 bg-cyan-400/10 px-3 py-1 text-xs font-medium text-cyan-200", children: "Powered by Gemini 2.5 Flash" })
+          ] })
+        ] }) }),
+        /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("section", { className: "grid gap-4 md:grid-cols-2 xl:grid-cols-4", children: [
+          /* @__PURE__ */ (0, import_jsx_runtime.jsx)(
+            MetricCard,
+            {
+              label: "Total Reviews",
+              value: isLoading ? "\u2026" : formatCompactNumber(metrics.totalReviews),
+              detail: "Incoming pull requests processed in the live feed.",
+              tone: scoreTone(88)
+            }
+          ),
+          /* @__PURE__ */ (0, import_jsx_runtime.jsx)(
+            MetricCard,
+            {
+              label: "Avg Quality Score",
+              value: isLoading ? "\u2026" : `${metrics.avgQualityScore}`,
+              detail: "Rolling average across the current review window.",
+              tone: scoreTone(metrics.avgQualityScore),
+              gaugeScore: metrics.avgQualityScore
+            }
+          ),
+          /* @__PURE__ */ (0, import_jsx_runtime.jsx)(
+            MetricCard,
+            {
+              label: "Issues Found",
+              value: isLoading ? "\u2026" : formatCompactNumber(metrics.issuesFound),
+              detail: "Total findings surfaced by the review engine.",
+              tone: scoreTone(metrics.avgQualityScore)
+            }
+          ),
+          /* @__PURE__ */ (0, import_jsx_runtime.jsx)(
+            MetricCard,
+            {
+              label: "Critical Issues",
+              value: isLoading ? "\u2026" : formatCompactNumber(metrics.criticalIssues),
+              detail: "Blocking risks that deserve immediate attention.",
+              tone: scoreTone(metrics.criticalIssues > 0 ? 55 : 90)
+            }
+          )
+        ] }),
+        /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("section", { className: "grid gap-6 xl:grid-cols-[minmax(0,1.6fr)_minmax(340px,0.88fr)]", children: [
+          /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { className: "space-y-6", children: [
+            /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("article", { className: "overflow-hidden rounded-[30px] border border-white/8 bg-slate-950/70 shadow-[0_30px_90px_rgba(2,6,23,0.28)] backdrop-blur-xl", children: [
+              /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { className: "flex items-center justify-between gap-4 border-b border-white/6 px-5 py-5 sm:px-6", children: [
+                /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [
+                  /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", { className: "text-xs font-semibold uppercase tracking-[0.3em] text-slate-400", children: "Score trend" }),
+                  /* @__PURE__ */ (0, import_jsx_runtime.jsx)("h2", { className: "mt-2 text-xl font-semibold tracking-tight text-slate-50", children: "Review quality over time" })
+                ] }),
+                lastUpdated ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", { className: "text-sm text-slate-400", children: [
+                  "Updated ",
+                  formatTimeAgo(lastUpdated)
+                ] }) : null
+              ] }),
+              /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "h-[260px] px-3 py-4 sm:px-5", children: trendData.length > 0 ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ResponsiveContainer, { width: "100%", height: "100%", children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(AreaChart, { data: trendData, margin: { top: 10, right: 12, left: -8, bottom: 0 }, children: [
+                /* @__PURE__ */ (0, import_jsx_runtime.jsx)("defs", { children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("linearGradient", { id: "scoreGradient", x1: "0", y1: "0", x2: "0", y2: "1", children: [
+                  /* @__PURE__ */ (0, import_jsx_runtime.jsx)("stop", { offset: "0%", stopColor: "#38bdf8", stopOpacity: 0.38 }),
+                  /* @__PURE__ */ (0, import_jsx_runtime.jsx)("stop", { offset: "75%", stopColor: "#38bdf8", stopOpacity: 0.03 })
+                ] }) }),
+                /* @__PURE__ */ (0, import_jsx_runtime.jsx)(CartesianGrid, { stroke: "rgba(148, 163, 184, 0.14)", strokeDasharray: "3 6", vertical: false }),
+                /* @__PURE__ */ (0, import_jsx_runtime.jsx)(
+                  XAxis,
+                  {
+                    dataKey: "label",
+                    tickLine: false,
+                    axisLine: false,
+                    interval: "preserveStartEnd",
+                    tick: { fill: "#94a3b8", fontSize: 12 }
+                  }
+                ),
+                /* @__PURE__ */ (0, import_jsx_runtime.jsx)(
+                  YAxis,
+                  {
+                    domain: [0, 100],
+                    tickCount: 6,
+                    tickLine: false,
+                    axisLine: false,
+                    tick: { fill: "#94a3b8", fontSize: 12 }
+                  }
+                ),
+                /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Tooltip, { content: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ChartTooltip, {}) }),
+                /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Area, { type: "monotone", dataKey: "score", stroke: "#38bdf8", strokeWidth: 3, fill: "url(#scoreGradient)" })
+              ] }) }) : /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "flex h-full items-center justify-center rounded-3xl border border-dashed border-white/10 bg-white/[0.02] text-sm text-slate-400", children: "Score history will appear here after the first review lands." }) })
+            ] }),
+            /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("article", { className: "overflow-hidden rounded-[30px] border border-white/8 bg-slate-950/70 shadow-[0_30px_90px_rgba(2,6,23,0.28)] backdrop-blur-xl", children: [
+              /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { className: "flex flex-col gap-3 border-b border-white/6 px-5 py-5 sm:flex-row sm:items-end sm:justify-between sm:px-6", children: [
+                /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [
+                  /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", { className: "text-xs font-semibold uppercase tracking-[0.3em] text-slate-400", children: "Recent reviews" }),
+                  /* @__PURE__ */ (0, import_jsx_runtime.jsx)("h2", { className: "mt-2 text-xl font-semibold tracking-tight text-slate-50", children: "Live pull request feed" })
+                ] }),
+                /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", { className: "text-sm text-slate-400", children: "Polling every 10 seconds" })
+              ] }),
+              error ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "border-b border-rose-400/15 bg-rose-500/10 px-5 py-3 text-sm text-rose-200 sm:px-6", children: error }) : null,
+              /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "overflow-x-auto", children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("table", { className: "min-w-full divide-y divide-white/6 text-left", children: [
+                /* @__PURE__ */ (0, import_jsx_runtime.jsx)("thead", { className: "bg-white/[0.02] text-xs uppercase tracking-[0.22em] text-slate-400", children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("tr", { children: [
+                  /* @__PURE__ */ (0, import_jsx_runtime.jsx)("th", { className: "min-w-[140px] px-4 py-4 font-medium sm:px-4", children: "Repo" }),
+                  /* @__PURE__ */ (0, import_jsx_runtime.jsx)("th", { className: "px-4 py-4 font-medium sm:px-4", children: "Pull Request" }),
+                  /* @__PURE__ */ (0, import_jsx_runtime.jsx)("th", { className: "px-4 py-4 font-medium sm:px-4", children: "Platform" }),
+                  /* @__PURE__ */ (0, import_jsx_runtime.jsx)("th", { className: "px-4 py-4 font-medium sm:px-4", children: "Score" }),
+                  /* @__PURE__ */ (0, import_jsx_runtime.jsx)("th", { className: "px-4 py-4 font-medium sm:px-4", children: "Issues" }),
+                  /* @__PURE__ */ (0, import_jsx_runtime.jsx)("th", { className: "px-4 py-4 font-medium sm:px-4 text-right", children: "Updated" }),
+                  /* @__PURE__ */ (0, import_jsx_runtime.jsx)("th", { className: "px-4 py-4 font-medium sm:px-4 text-right", children: "Action" })
+                ] }) }),
+                /* @__PURE__ */ (0, import_jsx_runtime.jsx)("tbody", { className: "divide-y divide-white/6", children: sortedReviews.length > 0 ? sortedReviews.map((review) => {
+                  const tone = scoreTone(review.score);
+                  const isActive = activeReview?.key === review.key;
+                  return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(
+                    "tr",
+                    {
+                      className: `transition-colors duration-200 ${isActive ? "bg-cyan-500/5" : "hover:bg-white/[0.045]"}`,
+                      children: [
+                        /* @__PURE__ */ (0, import_jsx_runtime.jsx)("td", { className: "min-w-[140px] px-4 py-[14px] align-top sm:px-4", children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { className: "max-w-[240px]", children: [
+                          /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", { className: "truncate font-medium text-slate-50", children: review.repoFullName }),
+                          /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", { className: "mt-1 text-xs text-slate-400", children: review.author })
+                        ] }) }),
+                        /* @__PURE__ */ (0, import_jsx_runtime.jsx)("td", { className: "px-4 py-[14px] align-top sm:px-4", children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { className: "max-w-[320px]", children: [
+                          /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", { className: "font-medium text-slate-50", children: review.title }),
+                          /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("p", { className: "mt-1 text-xs text-slate-400", children: [
+                            review.sourceBranch,
+                            " \u2192 ",
+                            review.targetBranch
+                          ] })
+                        ] }) }),
+                        /* @__PURE__ */ (0, import_jsx_runtime.jsx)("td", { className: "px-4 py-[14px] align-top sm:px-4", children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(PlatformPill, { platform: review.platform }) }),
+                        /* @__PURE__ */ (0, import_jsx_runtime.jsx)("td", { className: "px-4 py-[14px] align-top sm:px-4", children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ScoreBadge, { score: review.score }) }),
+                        /* @__PURE__ */ (0, import_jsx_runtime.jsx)("td", { className: "px-4 py-[14px] align-top sm:px-4", children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [
+                          /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("p", { className: "text-sm font-medium text-slate-100", children: [
+                            review.issueCount,
+                            " issues"
+                          ] }),
+                          /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("p", { className: `mt-1 text-xs ${tone.text}`, children: [
+                            review.criticalIssueCount,
+                            " critical"
+                          ] })
+                        ] }) }),
+                        /* @__PURE__ */ (0, import_jsx_runtime.jsx)("td", { className: "px-4 py-[14px] align-top text-right text-sm text-slate-400 opacity-50 sm:px-4", children: formatTimeAgo(review.createdAt) }),
+                        /* @__PURE__ */ (0, import_jsx_runtime.jsx)("td", { className: "px-4 py-[14px] align-top text-right sm:px-4", children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(
+                          "button",
+                          {
+                            type: "button",
+                            onClick: () => setActiveReviewKey(review.key),
+                            className: "inline-flex items-center rounded-full border border-white/10 bg-white/[0.04] px-4 py-2 text-sm font-medium text-slate-100 transition hover:border-cyan-400/40 hover:bg-cyan-400/10 hover:text-cyan-100",
+                            children: "View Details"
+                          }
+                        ) })
+                      ]
+                    },
+                    review.key
+                  );
+                }) : /* @__PURE__ */ (0, import_jsx_runtime.jsx)("tr", { children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("td", { className: "px-5 py-10 text-center text-sm text-slate-400 sm:px-6", colSpan: 7, children: isLoading ? "Loading live review feed..." : "No reviews yet. Push a webhook to populate the dashboard." }) }) })
+              ] }) })
+            ] })
+          ] }),
+          /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("aside", { className: "space-y-6", children: [
+            /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("article", { className: "rounded-[30px] border border-white/8 bg-slate-950/70 p-5 shadow-[0_30px_90px_rgba(2,6,23,0.28)] backdrop-blur-xl sm:p-6", children: [
+              /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { className: "flex items-start justify-between gap-4", children: [
+                /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [
+                  /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", { className: "text-xs font-semibold uppercase tracking-[0.3em] text-slate-400", children: "Selected review" }),
+                  /* @__PURE__ */ (0, import_jsx_runtime.jsx)("h2", { className: "mt-2 text-xl font-semibold tracking-tight text-slate-50", children: activeReview?.title ?? "Choose a review" })
+                ] }),
+                activeReview ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)(PlatformPill, { platform: activeReview.platform }) : null
+              ] }),
+              activeReview ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { className: "mt-6 space-y-6", children: [
+                /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { className: "flex items-center gap-5", children: [
+                  /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ScoreGauge, { score: activeReview.score, size: 116 }),
+                  /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [
+                    /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", { className: "text-sm text-slate-400", children: activeReview.repoFullName }),
+                    /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", { className: "mt-2 text-sm leading-7 text-slate-300", children: activeReview.summary })
+                  ] })
+                ] }),
+                /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { className: "grid gap-3 rounded-3xl border border-white/8 bg-white/[0.03] p-4 text-sm text-slate-300", children: [
+                  /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { className: "flex items-center justify-between gap-4", children: [
+                    /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { className: "text-slate-400", children: "Pull request" }),
+                    /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", { className: "font-medium text-slate-100", children: [
+                      "#",
+                      activeReview.prId
+                    ] })
+                  ] }),
+                  /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { className: "flex items-center justify-between gap-4", children: [
+                    /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { className: "text-slate-400", children: "Issues found" }),
+                    /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { className: "font-medium text-slate-100", children: activeReview.issueCount })
+                  ] }),
+                  /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { className: "flex items-center justify-between gap-4", children: [
+                    /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { className: "text-slate-400", children: "Critical issues" }),
+                    /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { className: "font-medium text-slate-100", children: activeReview.criticalIssueCount })
+                  ] }),
+                  /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { className: "flex items-center justify-between gap-4", children: [
+                    /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { className: "text-slate-400", children: "Branches" }),
+                    /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", { className: "max-w-[220px] truncate font-medium text-slate-100", children: [
+                      activeReview.sourceBranch,
+                      " \u2192 ",
+                      activeReview.targetBranch
+                    ] })
+                  ] }),
+                  /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { className: "flex items-center justify-between gap-4", children: [
+                    /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { className: "text-slate-400", children: "Updated" }),
+                    /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { className: "font-medium text-slate-100", children: formatTimeAgo(activeReview.createdAt) })
+                  ] })
+                ] }),
+                /* @__PURE__ */ (0, import_jsx_runtime.jsx)(
+                  "button",
+                  {
+                    type: "button",
+                    onClick: () => setActiveReviewKey(activeReview.key),
+                    className: "inline-flex w-full items-center justify-center rounded-2xl bg-gradient-to-r from-cyan-400 to-emerald-400 px-4 py-3 text-sm font-semibold text-slate-950 transition hover:brightness-110",
+                    children: "Refresh focus"
+                  }
+                ),
+                activeReviewDetail?.mergeRecommendation ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)(
+                  "div",
+                  {
+                    className: `rounded-[28px] border px-5 py-4 shadow-[0_22px_60px_rgba(2,6,23,0.35)] ${mergeVerdictTone(activeReviewDetail.mergeRecommendation.verdict).bg} ${mergeVerdictTone(activeReviewDetail.mergeRecommendation.verdict).border}`,
+                    children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { className: "flex items-start gap-3", children: [
+                      /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: `mt-0.5 rounded-2xl border border-white/10 p-2 ${mergeVerdictTone(activeReviewDetail.mergeRecommendation.verdict).text}`, children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ShieldIcon, {}) }),
+                      /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { className: "min-w-0 flex-1", children: [
+                        /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", { className: "text-xs font-semibold uppercase tracking-[0.28em] text-slate-400", children: "Merge readiness" }),
+                        /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { className: "mt-2 flex flex-wrap items-center gap-3", children: [
+                          /* @__PURE__ */ (0, import_jsx_runtime.jsx)("h3", { className: `text-xl font-semibold tracking-tight ${mergeVerdictTone(activeReviewDetail.mergeRecommendation.verdict).text}`, children: mergeVerdictTone(activeReviewDetail.mergeRecommendation.verdict).label }),
+                          /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", { className: "rounded-full border border-white/10 bg-white/[0.06] px-3 py-1 text-xs font-medium text-slate-200", children: [
+                            "Confidence ",
+                            activeReviewDetail.mergeRecommendation.confidence,
+                            "/100"
+                          ] })
+                        ] }),
+                        activeReviewDetail.mergeRecommendation.blockers.length > 0 ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("p", { className: "mt-3 text-sm leading-6 text-slate-200", children: [
+                          "Blockers: ",
+                          activeReviewDetail.mergeRecommendation.blockers.join("; ")
+                        ] }) : null,
+                        activeReviewDetail.mergeRecommendation.quickWins.length > 0 ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("p", { className: "mt-2 text-sm leading-6 text-slate-300", children: [
+                          "Quick wins: ",
+                          activeReviewDetail.mergeRecommendation.quickWins.join("; ")
+                        ] }) : null
+                      ] })
+                    ] })
+                  }
+                ) : null,
+                /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { className: "space-y-3", children: [
+                  /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { className: "flex items-center justify-between gap-4", children: [
+                    /* @__PURE__ */ (0, import_jsx_runtime.jsx)("h3", { className: "text-sm font-semibold uppercase tracking-[0.28em] text-slate-400", children: "Issue cards" }),
+                    detailLoading ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { className: "text-xs text-slate-500", children: "Loading details..." }) : null
+                  ] }),
+                  detailError ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "rounded-2xl border border-rose-400/20 bg-rose-500/10 px-4 py-3 text-sm text-rose-200", children: detailError }) : null,
+                  /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "space-y-3", children: (activeReviewDetail?.result.issues ?? []).length > 0 ? activeReviewDetail?.result.issues.map((issue, index) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("article", { className: "rounded-3xl border border-white/8 bg-white/[0.03] p-4", children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { className: "flex flex-col gap-3 lg:flex-row lg:items-start lg:justify-between", children: [
+                    /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { className: "space-y-2", children: [
+                      /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { className: "flex flex-wrap items-center gap-2", children: [
+                        /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { className: "rounded-full border border-white/8 bg-white/[0.04] px-2.5 py-1 text-[11px] font-semibold uppercase tracking-[0.22em] text-slate-300", children: issue.severity }),
+                        /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { className: "rounded-full border border-white/8 bg-white/[0.04] px-2.5 py-1 text-[11px] font-semibold uppercase tracking-[0.22em] text-slate-400", children: issue.category })
+                      ] }),
+                      /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", { className: "text-sm font-medium text-slate-100", children: issue.message }),
+                      /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("p", { className: "text-xs text-slate-400", children: [
+                        issue.filename,
+                        " \xB7 line ",
+                        issue.line
+                      ] }),
+                      /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", { className: "text-sm leading-6 text-slate-300", children: issue.suggestion })
+                    ] }),
+                    /* @__PURE__ */ (0, import_jsx_runtime.jsx)(
+                      "button",
+                      {
+                        type: "button",
+                        onClick: () => explainIssue(index, issue),
+                        className: "inline-flex shrink-0 items-center justify-center rounded-full border border-cyan-400/25 bg-cyan-400/10 px-4 py-2 text-sm font-medium text-cyan-100 transition hover:border-cyan-300/50 hover:bg-cyan-400/15",
+                        children: "Explain this \u2726"
+                      }
+                    )
+                  ] }) }, `${issue.filename}:${issue.line}:${index}`)) : /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "rounded-3xl border border-dashed border-white/10 bg-white/[0.02] px-4 py-6 text-sm text-slate-400", children: detailLoading ? "Loading issue details..." : "No issue details available for this review." }) })
+                ] })
+              ] }) : /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "mt-6 rounded-3xl border border-dashed border-white/10 bg-white/[0.02] p-6 text-sm leading-7 text-slate-400", children: "The selected review detail panel will populate once the dashboard receives data." })
+            ] }),
+            /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("article", { className: "rounded-[30px] border border-white/8 bg-slate-950/70 p-5 shadow-[0_30px_90px_rgba(2,6,23,0.28)] backdrop-blur-xl sm:p-6", children: [
+              /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", { className: "text-xs font-semibold uppercase tracking-[0.3em] text-slate-400", children: "Live signal" }),
+              /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { className: "mt-4 flex items-center gap-4", children: [
+                /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { className: "rounded-3xl border border-white/8 bg-white/[0.03] p-4", children: [
+                  /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "text-xs uppercase tracking-[0.2em] text-slate-500", children: "Current avg" }),
+                  /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "mt-2 text-3xl font-semibold tracking-tight text-slate-50", children: metrics.avgQualityScore })
+                ] }),
+                /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { className: "space-y-2 text-sm text-slate-400", children: [
+                  /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", { children: "Scores above 80 stay in the green band." }),
+                  /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", { children: "60-80 is yellow, below 60 is flagged red." })
+                ] })
+              ] })
+            ] })
+          ] })
+        ] }),
+        explainOpen ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "fixed inset-0 z-50 flex items-end justify-center bg-slate-950/70 p-4 backdrop-blur-sm sm:items-center", children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { className: "w-full max-w-3xl overflow-hidden rounded-[32px] border border-white/10 bg-slate-950 shadow-[0_30px_120px_rgba(0,0,0,0.55)]", children: [
+          /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { className: "flex items-start justify-between gap-4 border-b border-white/8 px-5 py-4 sm:px-6", children: [
+            /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [
+              /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", { className: "text-xs font-semibold uppercase tracking-[0.28em] text-cyan-300", children: "Explain this issue" }),
+              /* @__PURE__ */ (0, import_jsx_runtime.jsx)("h3", { className: "mt-2 text-lg font-semibold tracking-tight text-slate-50", children: explainTitle })
+            ] }),
+            /* @__PURE__ */ (0, import_jsx_runtime.jsx)(
+              "button",
+              {
+                type: "button",
+                onClick: () => {
+                  stopExplanation();
+                  setExplainOpen(false);
+                  setExplainStatus("idle");
+                  setExplainText("");
+                },
+                className: "rounded-full border border-white/10 bg-white/[0.04] px-3 py-2 text-sm text-slate-200 transition hover:bg-white/[0.08]",
+                children: "Close"
+              }
+            )
+          ] }),
+          /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { className: "max-h-[70vh] overflow-y-auto px-5 py-5 sm:px-6", children: [
+            /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "rounded-[28px] border border-white/8 bg-white/[0.03] p-5 text-sm leading-7 text-slate-200 whitespace-pre-wrap", children: explainText.length > 0 ? explainText : explainStatus === "streaming" ? "Starting explanation..." : "No explanation yet." }),
+            /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "mt-4 text-xs uppercase tracking-[0.26em] text-slate-500", children: explainStatus === "streaming" ? "Gemini is streaming the explanation" : explainStatus === "done" ? "Explanation complete" : explainStatus === "error" ? "Stream interrupted" : "Idle" })
+          ] })
+        ] }) }) : null
+      ] })
+    ] });
   }
 
   // src/frontend/main.tsx
+  var import_jsx_runtime2 = __toESM(require_jsx_runtime(), 1);
   var rootElement = document.getElementById("root");
   if (!rootElement) {
     throw new Error("Dashboard root element not found.");
   }
   document.documentElement.classList.add("dark");
   document.documentElement.style.colorScheme = "dark";
-  (0, import_client.createRoot)(rootElement).render(/* @__PURE__ */ React.createElement(App, null));
+  (0, import_client.createRoot)(rootElement).render(/* @__PURE__ */ (0, import_jsx_runtime2.jsx)(App, {}));
 })();
 /*! Bundled license information:
 
@@ -31630,5 +31939,16 @@ react-is/cjs/react-is.production.min.js:
 
 decimal.js-light/decimal.js:
   (*! decimal.js-light v2.5.1 https://github.com/MikeMcl/decimal.js-light/LICENCE *)
+
+react/cjs/react-jsx-runtime.production.min.js:
+  (**
+   * @license React
+   * react-jsx-runtime.production.min.js
+   *
+   * Copyright (c) Facebook, Inc. and its affiliates.
+   *
+   * This source code is licensed under the MIT license found in the
+   * LICENSE file in the root directory of this source tree.
+   *)
 */
 //# sourceMappingURL=app.js.map
