@@ -565,6 +565,11 @@ export default function App() {
     });
   };
 
+  const handleViewDetailsClick = (review: ReviewListItem) => {
+    console.log("View Details clicked", review.prId);
+    setActiveReviewKey(review.key);
+  };
+
   return (
     <div className="min-h-screen bg-slate-950 text-slate-100">
       <div className="pointer-events-none fixed inset-0 bg-[radial-gradient(circle_at_top_left,_rgba(59,130,246,0.16),_transparent_30%),radial-gradient(circle_at_top_right,_rgba(34,197,94,0.12),_transparent_24%),radial-gradient(circle_at_80%_20%,_rgba(245,158,11,0.14),_transparent_28%)]" />
@@ -745,7 +750,7 @@ export default function App() {
                             <td className="px-4 py-[14px] align-top text-right sm:px-4">
                               <button
                                 type="button"
-                                onClick={() => setActiveReviewKey(review.key)}
+                                onClick={() => handleViewDetailsClick(review)}
                                 className="inline-flex items-center rounded-full border border-white/10 bg-white/[0.04] px-4 py-2 text-sm font-medium text-slate-100 transition hover:border-cyan-400/40 hover:bg-cyan-400/10 hover:text-cyan-100"
                               >
                                 View Details

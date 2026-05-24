@@ -1,4 +1,3 @@
-import { GoogleGenerativeAI } from "@google/generative-ai";
 import {
   clampRiskScore,
   severityWeights,
@@ -8,7 +7,8 @@ import {
   type ReviewResult
 } from "@reviewai/shared";
 
-const MODEL_NAME = "gemini-2.5-flash";
+const OPENROUTER_API_URL = "https://openrouter.ai/api/v1/chat/completions";
+const MODEL_NAME = "openai/gpt-3.5-turbo";
 const RETRY_DELAYS_MS = [10_000, 20_000, 40_000];
 const MAX_BATCH_SIZE = 5;
 const BATCH_DELAY_MS = 1_000;
@@ -16,10 +16,7 @@ const BATCH_DELAY_MS = 1_000;
 const severityOrder: ReviewIssue["severity"][] = ["critical", "warning", "suggestion"];
 const categoryOrder: ReviewIssue["category"][] = ["security", "performance", "bug", "smell", "style"];
 
-const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY ?? "");
-const model = genAI.getGenerativeModel({ model: MODEL_NAME });
-
-type GeminiIssue = Partial<ReviewIssue> & {
+type ModelIssue = Partial<ReviewIssue> & {
   line?: number | string;
   severity?: string;
   category?: string;
@@ -28,12 +25,20 @@ type GeminiIssue = Partial<ReviewIssue> & {
   filename?: string;
 };
 
-type GeminiIssuesPayload =
-  | GeminiIssue[]
+type ModelIssuesPayload =
+  | ModelIssue[]
   | {
-      issues?: GeminiIssue[];
-      findings?: GeminiIssue[];
+      issues?: ModelIssue[];
+      findings?: ModelIssue[];
     };
+
+interface OpenRouterCompletionResponse {
+  choices?: Array<{
+    message?: {
+      content?: string;
+    };
+  }>;
+}
 
 const sleep = async (milliseconds: number): Promise<void> => {
   await new Promise<void>((resolve) => setTimeout(resolve, milliseconds));
@@ -112,7 +117,7 @@ const calculateQualityScore = (issues: ReviewIssue[]): number => {
   return clampRiskScore(100 - penalty);
 };
 
-const parseJsonPayload = (text: string): GeminiIssuesPayload => {
+const parseJsonPayload = (text: string): ModelIssuesPayload => {
   const trimmed = text.trim();
 
   const fencedMatch = trimmed.match(/^```(?:json)?\s*([\s\S]*?)\s*```$/i);
@@ -122,7 +127,7 @@ const parseJsonPayload = (text: string): GeminiIssuesPayload => {
   const lastBrace = Math.max(payloadText.lastIndexOf("}"), payloadText.lastIndexOf("]"));
   const jsonText = firstBrace >= 0 && lastBrace >= firstBrace ? payloadText.slice(firstBrace, lastBrace + 1) : payloadText;
 
-  return JSON.parse(jsonText) as GeminiIssuesPayload;
+  return JSON.parse(jsonText) as ModelIssuesPayload;
 };
 
 const normalizeSeverity = (value: unknown): ReviewIssue["severity"] => {
@@ -154,7 +159,7 @@ const normalizeLineNumber = (value: unknown, fallback: number): number => {
   return Number.isFinite(parsed) && parsed > 0 ? Math.trunc(parsed) : fallback;
 };
 
-const normalizeIssue = (item: GeminiIssue, fallbackFile: FileDiff): ReviewIssue => {
+const normalizeIssue = (item: ModelIssue, fallbackFile: FileDiff): ReviewIssue => {
   const lineFallback =
     fallbackFile.changes.find((change) => change.type === "add" && change.newLineNumber)
       ?.newLineNumber ?? fallbackFile.changes.find((change) => change.type === "delete" && change.oldLineNumber)?.oldLineNumber ?? 1;
@@ -169,7 +174,7 @@ const normalizeIssue = (item: GeminiIssue, fallbackFile: FileDiff): ReviewIssue 
   };
 };
 
-const extractIssues = (payload: GeminiIssuesPayload, file: FileDiff): ReviewIssue[] => {
+const extractIssues = (payload: ModelIssuesPayload, file: FileDiff): ReviewIssue[] => {
   const candidates = Array.isArray(payload) ? payload : payload.issues ?? payload.findings ?? [];
   return candidates.map((issue) => normalizeIssue(issue, file));
 };
@@ -186,14 +191,54 @@ const isRetryableRateLimitError = (error: unknown): boolean => {
   return status === 429 || code === 429 || message.includes("429") || /rate limit/i.test(message);
 };
 
+const extractCompletionContent = (payload: OpenRouterCompletionResponse): string => {
+  const content = payload.choices?.[0]?.message?.content;
+
+  if (typeof content === "string") {
+    return content;
+  }
+
+  throw new Error("OpenRouter response did not include choices[0].message.content");
+};
+
+const callOpenRouter = async (prompt: string): Promise<string> => {
+  const apiKey = process.env.OPENROUTER_API_KEY;
+
+  if (!apiKey) {
+    throw new Error("OPENROUTER_API_KEY is missing.");
+  }
+
+  const response = await fetch(OPENROUTER_API_URL, {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${apiKey}`,
+      "Content-Type": "application/json",
+      "HTTP-Referer": "http://localhost:3000",
+      "X-Title": "CodeSentinel"
+    },
+    body: JSON.stringify({
+      model: MODEL_NAME,
+      messages: [{ role: "user", content: prompt }],
+      stream: false
+    })
+  });
+  console.log("OpenRouter response status:", response.status);
+
+  if (!response.ok) {
+    const errorBody = await response.text();
+    throw new Error(`OpenRouter request failed (${response.status} ${response.statusText}): ${errorBody}`);
+  }
+
+  const payload = (await response.json()) as OpenRouterCompletionResponse;
+  return extractCompletionContent(payload);
+};
+
 const generateWithRetry = async (prompt: string): Promise<string> => {
   let lastError: unknown;
 
   for (let attempt = 0; attempt <= RETRY_DELAYS_MS.length; attempt += 1) {
     try {
-      const result = await model.generateContent(prompt);
-      const response = await result.response;
-      return response.text();
+      return await callOpenRouter(prompt);
     } catch (error) {
       lastError = error;
 
@@ -205,7 +250,7 @@ const generateWithRetry = async (prompt: string): Promise<string> => {
     }
   }
 
-  throw lastError instanceof Error ? lastError : new Error("Gemini request failed.");
+  throw lastError instanceof Error ? lastError : new Error("OpenRouter request failed.");
 };
 
 export async function analyzeFileDiff(file: FileDiff): Promise<ReviewIssue[]> {
@@ -214,7 +259,7 @@ export async function analyzeFileDiff(file: FileDiff): Promise<ReviewIssue[]> {
   try {
     return extractIssues(parseJsonPayload(responseText), file);
   } catch (error) {
-    throw new Error(`Unable to parse Gemini JSON for ${file.filename}: ${error instanceof Error ? error.message : String(error)}`);
+    throw new Error(`Unable to parse model JSON for ${file.filename}: ${error instanceof Error ? error.message : String(error)}`);
   }
 }
 

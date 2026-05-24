@@ -84,7 +84,7 @@ export const createApp = (): express.Express => {
     response.json(reviewGitlabPayload(request.body));
   });
 
-  app.get("*", (_request: Request, response: Response) => {
+  app.get(/.*/, (_request: Request, response: Response) => {
     response.sendFile(path.join(publicDirectory, "index.html"));
   });
 

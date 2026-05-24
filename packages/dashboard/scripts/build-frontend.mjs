@@ -13,6 +13,8 @@ const buildOptions = {
   format: "iife",
   platform: "browser",
   target: ["es2022"],
+  jsx: "automatic",
+  jsxImportSource: "react",
   outfile: "public/app.js",
   sourcemap: true,
   define: {

@@ -134,18 +134,6 @@ const buildCodeContext = (review: StoredReview, issue: ReviewIssue): string => {
   ].join("\n");
 };
 
-const writeSseEvent = (response: Response, event: string | undefined, data: string): void => {
-  if (event) {
-    response.write(`event: ${event}\n`);
-  }
-
-  for (const line of data.split(/\r?\n/)) {
-    response.write(`data: ${line}\n`);
-  }
-
-  response.write("\n");
-};
-
 const pickCycle = <T>(values: readonly [T, ...T[]], index: number): T => values[index % values.length]!;
 
 const createDemoSeedReviews = (): DemoSeedReview[] => {
@@ -609,17 +597,22 @@ export const createApp = (): express.Express => {
     response.setHeader("Content-Type", "text/event-stream");
     response.setHeader("Cache-Control", "no-cache");
     response.setHeader("Connection", "keep-alive");
-    response.flushHeaders?.();
+    response.flushHeaders();
 
     try {
       for await (const chunk of explainIssue(issue, buildCodeContext(review, issue))) {
-        writeSseEvent(response, undefined, chunk);
+        response.write(`data: ${chunk}\n\n`);
       }
 
-      writeSseEvent(response, "done", "[DONE]");
+      response.write("data: [DONE]\n\n");
+      response.end();
     } catch (error) {
-      writeSseEvent(response, "error", error instanceof Error ? error.message : "Unable to generate an explanation.");
-    } finally {
+      console.error("SSE explanation stream failed", {
+        prId,
+        issueIndex,
+        error
+      });
+      response.write("data: [ERROR]\n\n");
       response.end();
     }
   });

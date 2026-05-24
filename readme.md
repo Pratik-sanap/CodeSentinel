@@ -69,7 +69,7 @@ Visit [aistudio.google.com](https://aistudio.google.com) and create a free Gemin
 Create a `.env` file in the repository root:
 
 ```env
-GEMINI_API_KEY=your-gemini-api-key
+OPENROUTER_API_KEY=your-openrouter-api-key
 GITHUB_APP_SECRET=your-github-webhook-secret
 GITHUB_APP_TOKEN=your-github-token-or-installation-token
 GITLAB_WEBHOOK_SECRET=your-gitlab-webhook-secret

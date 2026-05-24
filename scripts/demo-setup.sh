@@ -26,7 +26,7 @@ wait_for_http() {
   local label="$2"
   local attempt=0
 
-  until curl -fsS "$url" >/dev/null 2>&1; do
+  until powershell.exe -NoProfile -Command "try { Invoke-WebRequest -UseBasicParsing -Uri '$url' | Out-Null; exit 0 } catch { exit 1 }" >/dev/null 2>&1; do
     attempt=$((attempt + 1))
     if [[ "$attempt" -ge 60 ]]; then
       echo "Timed out waiting for ${label}" >&2
@@ -64,7 +64,7 @@ if ! command -v corepack >/dev/null 2>&1; then
   exit 1
 fi
 
-if ! command -v ngrok >/dev/null 2>&1; then
+if ! command -v ngrok.cmd >/dev/null 2>&1 && ! command -v ngrok >/dev/null 2>&1; then
   echo "ngrok is required but was not found on PATH." >&2
   exit 1
 fi
@@ -75,18 +75,18 @@ nohup corepack pnpm --filter @reviewai/dashboard dev >"$DASHBOARD_LOG" 2>&1 &
 wait_for_http "http://127.0.0.1:3000/health" "dashboard"
 
 echo "Starting ngrok tunnel..."
-nohup ngrok http 3000 >"$NGROK_LOG" 2>&1 &
+nohup cmd.exe /c ngrok http 3000 >"$NGROK_LOG" 2>&1 &
 
 wait_for_http "http://127.0.0.1:4040/api/tunnels" "ngrok API"
 
 echo "Seeding demo reviews..."
-curl -fsS -X POST "http://127.0.0.1:3000/api/demo/seed" >/dev/null
+powershell.exe -NoProfile -Command "try { Invoke-WebRequest -UseBasicParsing -Method Post -Uri 'http://127.0.0.1:3000/api/demo/seed' | Out-Null; exit 0 } catch { exit 1 }" >/dev/null 2>&1
 
 PUBLIC_URL=""
 for _ in $(seq 1 30); do
-  TUNNELS_JSON="$(curl -fsS "http://127.0.0.1:4040/api/tunnels" 2>/dev/null || true)"
+  TUNNELS_JSON="$(powershell.exe -NoProfile -Command "try { (Invoke-WebRequest -UseBasicParsing -Uri 'http://127.0.0.1:4040/api/tunnels').Content } catch { '' }" 2>/dev/null || true)"
   if [[ -n "$TUNNELS_JSON" ]]; then
-    PUBLIC_URL="$(node -e 'const data = JSON.parse(process.argv[1]); const tunnel = data.tunnels.find((entry) => entry.proto === "https") || data.tunnels[0]; if (!tunnel) process.exit(1); process.stdout.write(tunnel.public_url);' "$TUNNELS_JSON")"
+    PUBLIC_URL="$(node.exe -e 'const data = JSON.parse(process.argv[1]); const tunnel = data.tunnels.find((entry) => entry.proto === "https") || data.tunnels[0]; if (!tunnel) process.exit(1); process.stdout.write(tunnel.public_url);' "$TUNNELS_JSON")"
     if [[ -n "$PUBLIC_URL" ]]; then
       break
     fi
