@@ -420,18 +420,24 @@ export default function App() {
 
   const mergeVerdictTone = (verdict?: ReviewDetailResponse["mergeRecommendation"]["verdict"]) => {
     if (verdict === "block") {
-      return { label: "Blocked", bg: "bg-rose-500/12", border: "border-rose-400/30", text: "text-rose-200" };
+      return { label: "Blocked", bg: "bg-rose-500/12", border: "border-rose-400/30", text: "text-rose-200", badge: "" };
     }
 
     if (verdict === "request-changes") {
-      return { label: "Request changes", bg: "bg-amber-500/12", border: "border-amber-400/30", text: "text-amber-200" };
+      return { label: "Request changes", bg: "bg-amber-500/12", border: "border-amber-400/30", text: "text-amber-200", badge: "" };
     }
 
     if (verdict === "approve-with-changes") {
-      return { label: "Approve with changes", bg: "bg-cyan-500/12", border: "border-cyan-400/30", text: "text-cyan-200" };
+      return { label: "Approve with changes", bg: "bg-cyan-500/12", border: "border-cyan-400/30", text: "text-cyan-200", badge: "" };
     }
 
-    return { label: "Approved", bg: "bg-emerald-500/12", border: "border-emerald-400/30", text: "text-emerald-200" };
+    return {
+      label: "Approved",
+      bg: "bg-emerald-500/12",
+      border: "border-emerald-400/30",
+      text: "text-emerald-200",
+      badge: "bg-emerald-400/12 border-emerald-300/20 text-emerald-100"
+    };
   };
 
   useEffect(() => {
@@ -818,7 +824,7 @@ export default function App() {
                   <button
                     type="button"
                     onClick={() => setActiveReviewKey(activeReview.key)}
-                    className="inline-flex w-full items-center justify-center rounded-2xl bg-gradient-to-r from-cyan-400 to-emerald-400 px-4 py-3 text-sm font-semibold text-slate-950 transition hover:brightness-110"
+                    className="inline-flex w-full items-center justify-center rounded-2xl border border-white/10 bg-slate-950/70 px-4 py-3 text-sm font-semibold text-slate-100 transition hover:border-white/20 hover:bg-white/[0.06]"
                   >
                     Refresh focus
                   </button>
@@ -834,9 +840,15 @@ export default function App() {
                         <div className="min-w-0 flex-1">
                           <p className="text-xs font-semibold uppercase tracking-[0.28em] text-slate-400">Merge readiness</p>
                           <div className="mt-2 flex flex-wrap items-center gap-3">
-                            <h3 className={`text-xl font-semibold tracking-tight ${mergeVerdictTone(activeReviewDetail.mergeRecommendation.verdict).text}`}>
-                              {mergeVerdictTone(activeReviewDetail.mergeRecommendation.verdict).label}
-                            </h3>
+                            <span
+                              className={`inline-flex items-center rounded-full border px-4 py-2 ${mergeVerdictTone(activeReviewDetail.mergeRecommendation.verdict).badge || "bg-white/[0.04] border-white/10"}`}
+                            >
+                              <h3
+                                className={`text-[18px] font-bold tracking-tight ${mergeVerdictTone(activeReviewDetail.mergeRecommendation.verdict).text}`}
+                              >
+                                {mergeVerdictTone(activeReviewDetail.mergeRecommendation.verdict).label}
+                              </h3>
+                            </span>
                             <span className="rounded-full border border-white/10 bg-white/[0.06] px-3 py-1 text-xs font-medium text-slate-200">
                               Confidence {activeReviewDetail.mergeRecommendation.confidence}/100
                             </span>
@@ -867,7 +879,7 @@ export default function App() {
                     <div className="space-y-3">
                       {(activeReviewDetail?.result.issues ?? []).length > 0 ? (
                         activeReviewDetail?.result.issues.map((issue, index) => (
-                          <article key={`${issue.filename}:${issue.line}:${index}`} className="rounded-3xl border border-white/8 bg-white/[0.03] p-4">
+                          <article key={`${issue.filename}:${issue.line}:${index}`} className="rounded-3xl border border-white/8 bg-white/[0.03] p-6">
                             <div className="flex flex-col gap-3 lg:flex-row lg:items-start lg:justify-between">
                               <div className="space-y-2">
                                 <div className="flex flex-wrap items-center gap-2">

@@ -31444,15 +31444,21 @@
     );
     const mergeVerdictTone = (verdict) => {
       if (verdict === "block") {
-        return { label: "Blocked", bg: "bg-rose-500/12", border: "border-rose-400/30", text: "text-rose-200" };
+        return { label: "Blocked", bg: "bg-rose-500/12", border: "border-rose-400/30", text: "text-rose-200", badge: "" };
       }
       if (verdict === "request-changes") {
-        return { label: "Request changes", bg: "bg-amber-500/12", border: "border-amber-400/30", text: "text-amber-200" };
+        return { label: "Request changes", bg: "bg-amber-500/12", border: "border-amber-400/30", text: "text-amber-200", badge: "" };
       }
       if (verdict === "approve-with-changes") {
-        return { label: "Approve with changes", bg: "bg-cyan-500/12", border: "border-cyan-400/30", text: "text-cyan-200" };
+        return { label: "Approve with changes", bg: "bg-cyan-500/12", border: "border-cyan-400/30", text: "text-cyan-200", badge: "" };
       }
-      return { label: "Approved", bg: "bg-emerald-500/12", border: "border-emerald-400/30", text: "text-emerald-200" };
+      return {
+        label: "Approved",
+        bg: "bg-emerald-500/12",
+        border: "border-emerald-400/30",
+        text: "text-emerald-200",
+        badge: "bg-emerald-400/12 border-emerald-300/20 text-emerald-100"
+      };
     };
     (0, import_react35.useEffect)(() => {
       if (!activeReview) {
@@ -31794,7 +31800,7 @@
                   {
                     type: "button",
                     onClick: () => setActiveReviewKey(activeReview.key),
-                    className: "inline-flex w-full items-center justify-center rounded-2xl bg-gradient-to-r from-cyan-400 to-emerald-400 px-4 py-3 text-sm font-semibold text-slate-950 transition hover:brightness-110",
+                    className: "inline-flex w-full items-center justify-center rounded-2xl border border-white/10 bg-slate-950/70 px-4 py-3 text-sm font-semibold text-slate-100 transition hover:border-white/20 hover:bg-white/[0.06]",
                     children: "Refresh focus"
                   }
                 ),
@@ -31807,7 +31813,19 @@
                       /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { className: "min-w-0 flex-1", children: [
                         /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", { className: "text-xs font-semibold uppercase tracking-[0.28em] text-slate-400", children: "Merge readiness" }),
                         /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { className: "mt-2 flex flex-wrap items-center gap-3", children: [
-                          /* @__PURE__ */ (0, import_jsx_runtime.jsx)("h3", { className: `text-xl font-semibold tracking-tight ${mergeVerdictTone(activeReviewDetail.mergeRecommendation.verdict).text}`, children: mergeVerdictTone(activeReviewDetail.mergeRecommendation.verdict).label }),
+                          /* @__PURE__ */ (0, import_jsx_runtime.jsx)(
+                            "span",
+                            {
+                              className: `inline-flex items-center rounded-full border px-4 py-2 ${mergeVerdictTone(activeReviewDetail.mergeRecommendation.verdict).badge || "bg-white/[0.04] border-white/10"}`,
+                              children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(
+                                "h3",
+                                {
+                                  className: `text-[18px] font-bold tracking-tight ${mergeVerdictTone(activeReviewDetail.mergeRecommendation.verdict).text}`,
+                                  children: mergeVerdictTone(activeReviewDetail.mergeRecommendation.verdict).label
+                                }
+                              )
+                            }
+                          ),
                           /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", { className: "rounded-full border border-white/10 bg-white/[0.06] px-3 py-1 text-xs font-medium text-slate-200", children: [
                             "Confidence ",
                             activeReviewDetail.mergeRecommendation.confidence,
@@ -31832,7 +31850,7 @@
                     detailLoading ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { className: "text-xs text-slate-500", children: "Loading details..." }) : null
                   ] }),
                   detailError ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "rounded-2xl border border-rose-400/20 bg-rose-500/10 px-4 py-3 text-sm text-rose-200", children: detailError }) : null,
-                  /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "space-y-3", children: (activeReviewDetail?.result.issues ?? []).length > 0 ? activeReviewDetail?.result.issues.map((issue, index) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("article", { className: "rounded-3xl border border-white/8 bg-white/[0.03] p-4", children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { className: "flex flex-col gap-3 lg:flex-row lg:items-start lg:justify-between", children: [
+                  /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "space-y-3", children: (activeReviewDetail?.result.issues ?? []).length > 0 ? activeReviewDetail?.result.issues.map((issue, index) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("article", { className: "rounded-3xl border border-white/8 bg-white/[0.03] p-6", children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { className: "flex flex-col gap-3 lg:flex-row lg:items-start lg:justify-between", children: [
                     /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { className: "space-y-2", children: [
                       /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { className: "flex flex-wrap items-center gap-2", children: [
                         /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { className: "rounded-full border border-white/8 bg-white/[0.04] px-2.5 py-1 text-[11px] font-semibold uppercase tracking-[0.22em] text-slate-300", children: issue.severity }),
