@@ -17,7 +17,6 @@ const OPENROUTER_API_URL = "https://openrouter.ai/api/v1/chat/completions";
 const OPENROUTER_MODEL = "openai/gpt-3.5-turbo";
 
 const openRouterApiKey = process.env.OPENROUTER_API_KEY;
-console.log(`OpenRouter key loaded: ${openRouterApiKey ? "YES" : "NO"}`);
 
 interface OpenRouterStreamChunk {
   choices?: Array<{
