@@ -239,8 +239,10 @@ const ScoreGauge = ({ score, size = 92, compact = false }: GaugeProps) => {
         />
       </svg>
       <div className="absolute inset-0 flex flex-col items-center justify-center text-center">
-        <span className={`text-xs font-semibold uppercase tracking-[0.28em] ${tone.text}`}>{tone.label}</span>
-        <span className="mt-1 text-2xl font-semibold tracking-tight text-slate-50">{Math.round(score)}</span>
+        {!compact ? <span className={`text-xs font-semibold uppercase tracking-[0.28em] ${tone.text}`}>{tone.label}</span> : null}
+        <span className={`${compact ? "text-sm" : "mt-1 text-2xl"} font-semibold tracking-tight text-slate-50`}>
+          {Math.round(score)}
+        </span>
         {!compact && <span className="text-[11px] text-slate-400">quality score</span>}
       </div>
       <span className="sr-only">{score} out of 100</span>
@@ -258,13 +260,17 @@ interface MetricCardProps {
 
 const MetricCard = ({ label, value, detail, tone, gaugeScore }: MetricCardProps) => (
   <article className={`rounded-3xl border border-white/8 bg-white/[0.04] p-5 shadow-[0_22px_60px_rgba(2,6,23,0.35)] ${tone.surface}`}>
-    <div className="flex items-start justify-between gap-4">
+    <div className="flex items-center justify-between gap-4">
       <div>
         <p className="text-xs font-medium uppercase tracking-[0.26em] text-slate-400">{label}</p>
         <p className="mt-3 text-3xl font-semibold tracking-tight text-slate-50">{value}</p>
         <p className="mt-2 text-sm leading-6 text-slate-400">{detail}</p>
       </div>
-      {typeof gaugeScore === "number" ? <ScoreGauge score={gaugeScore} size={76} compact /> : null}
+      {typeof gaugeScore === "number" ? (
+        <div className="flex shrink-0 items-center justify-end">
+          <ScoreGauge score={gaugeScore} size={40} compact />
+        </div>
+      ) : null}
     </div>
   </article>
 );
@@ -329,6 +335,7 @@ export default function App() {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [lastUpdated, setLastUpdated] = useState<string | null>(null);
+  const [visibleReviewCount, setVisibleReviewCount] = useState(10);
   const [activeReviewKey, setActiveReviewKey] = useState<string | null>(null);
   const [activeReviewDetail, setActiveReviewDetail] = useState<ReviewDetailResponse | null>(null);
   const [detailLoading, setDetailLoading] = useState(false);
@@ -404,6 +411,11 @@ export default function App() {
   const activeReview = useMemo(
     () => sortedReviews.find((review) => review.key === activeReviewKey) ?? sortedReviews[0] ?? null,
     [activeReviewKey, sortedReviews]
+  );
+
+  const visibleReviews = useMemo(
+    () => sortedReviews.slice(0, visibleReviewCount),
+    [sortedReviews, visibleReviewCount]
   );
 
   const mergeVerdictTone = (verdict?: ReviewDetailResponse["mergeRecommendation"]["verdict"]) => {
@@ -680,8 +692,8 @@ export default function App() {
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-white/6">
-                    {sortedReviews.length > 0 ? (
-                      sortedReviews.map((review) => {
+                    {visibleReviews.length > 0 ? (
+                      visibleReviews.map((review) => {
                         const tone = scoreTone(review.score);
                         const isActive = activeReview?.key === review.key;
 
@@ -740,6 +752,20 @@ export default function App() {
                     )}
                   </tbody>
                 </table>
+              </div>
+              <div className="flex flex-col gap-3 border-t border-white/6 px-5 py-4 sm:flex-row sm:items-center sm:justify-between sm:px-6">
+                <p className="text-sm text-slate-400">
+                  Showing {Math.min(visibleReviewCount, sortedReviews.length)} of {sortedReviews.length} reviews
+                </p>
+                {visibleReviewCount < sortedReviews.length ? (
+                  <button
+                    type="button"
+                    onClick={() => setVisibleReviewCount((current) => current + 10)}
+                    className="inline-flex items-center justify-center rounded-full border border-white/10 bg-white/[0.04] px-4 py-2 text-sm font-medium text-slate-100 transition hover:border-cyan-400/40 hover:bg-cyan-400/10 hover:text-cyan-100"
+                  >
+                    Show more
+                  </button>
+                ) : null}
               </div>
             </article>
           </div>

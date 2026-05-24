@@ -31304,8 +31304,8 @@
             )
           ] }),
           /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { className: "absolute inset-0 flex flex-col items-center justify-center text-center", children: [
-            /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { className: `text-xs font-semibold uppercase tracking-[0.28em] ${tone.text}`, children: tone.label }),
-            /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { className: "mt-1 text-2xl font-semibold tracking-tight text-slate-50", children: Math.round(score) }),
+            !compact ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { className: `text-xs font-semibold uppercase tracking-[0.28em] ${tone.text}`, children: tone.label }) : null,
+            /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { className: `${compact ? "text-sm" : "mt-1 text-2xl"} font-semibold tracking-tight text-slate-50`, children: Math.round(score) }),
             !compact && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { className: "text-[11px] text-slate-400", children: "quality score" })
           ] }),
           /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", { className: "sr-only", children: [
@@ -31316,13 +31316,13 @@
       }
     );
   };
-  var MetricCard = ({ label, value, detail, tone, gaugeScore }) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("article", { className: `rounded-3xl border border-white/8 bg-white/[0.04] p-5 shadow-[0_22px_60px_rgba(2,6,23,0.35)] ${tone.surface}`, children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { className: "flex items-start justify-between gap-4", children: [
+  var MetricCard = ({ label, value, detail, tone, gaugeScore }) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("article", { className: `rounded-3xl border border-white/8 bg-white/[0.04] p-5 shadow-[0_22px_60px_rgba(2,6,23,0.35)] ${tone.surface}`, children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { className: "flex items-center justify-between gap-4", children: [
     /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [
       /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", { className: "text-xs font-medium uppercase tracking-[0.26em] text-slate-400", children: label }),
       /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", { className: "mt-3 text-3xl font-semibold tracking-tight text-slate-50", children: value }),
       /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", { className: "mt-2 text-sm leading-6 text-slate-400", children: detail })
     ] }),
-    typeof gaugeScore === "number" ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ScoreGauge, { score: gaugeScore, size: 76, compact: true }) : null
+    typeof gaugeScore === "number" ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "flex shrink-0 items-center justify-end", children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ScoreGauge, { score: gaugeScore, size: 40, compact: true }) }) : null
   ] }) });
   var PlatformBadge = ({ platform }) => {
     const tone = platformTone[platform];
@@ -31374,6 +31374,7 @@
     const [isLoading, setIsLoading] = (0, import_react35.useState)(true);
     const [error, setError] = (0, import_react35.useState)(null);
     const [lastUpdated, setLastUpdated] = (0, import_react35.useState)(null);
+    const [visibleReviewCount, setVisibleReviewCount] = (0, import_react35.useState)(10);
     const [activeReviewKey, setActiveReviewKey] = (0, import_react35.useState)(null);
     const [activeReviewDetail, setActiveReviewDetail] = (0, import_react35.useState)(null);
     const [detailLoading, setDetailLoading] = (0, import_react35.useState)(false);
@@ -31436,6 +31437,10 @@
     const activeReview = (0, import_react35.useMemo)(
       () => sortedReviews.find((review) => review.key === activeReviewKey) ?? sortedReviews[0] ?? null,
       [activeReviewKey, sortedReviews]
+    );
+    const visibleReviews = (0, import_react35.useMemo)(
+      () => sortedReviews.slice(0, visibleReviewCount),
+      [sortedReviews, visibleReviewCount]
     );
     const mergeVerdictTone = (verdict) => {
       if (verdict === "block") {
@@ -31670,7 +31675,7 @@
                   /* @__PURE__ */ (0, import_jsx_runtime.jsx)("th", { className: "px-4 py-4 font-medium sm:px-4 text-right", children: "Updated" }),
                   /* @__PURE__ */ (0, import_jsx_runtime.jsx)("th", { className: "px-4 py-4 font-medium sm:px-4 text-right", children: "Action" })
                 ] }) }),
-                /* @__PURE__ */ (0, import_jsx_runtime.jsx)("tbody", { className: "divide-y divide-white/6", children: sortedReviews.length > 0 ? sortedReviews.map((review) => {
+                /* @__PURE__ */ (0, import_jsx_runtime.jsx)("tbody", { className: "divide-y divide-white/6", children: visibleReviews.length > 0 ? visibleReviews.map((review) => {
                   const tone = scoreTone(review.score);
                   const isActive = activeReview?.key === review.key;
                   return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(
@@ -31717,7 +31722,25 @@
                     review.key
                   );
                 }) : /* @__PURE__ */ (0, import_jsx_runtime.jsx)("tr", { children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("td", { className: "px-5 py-10 text-center text-sm text-slate-400 sm:px-6", colSpan: 7, children: isLoading ? "Loading live review feed..." : "No reviews yet. Push a webhook to populate the dashboard." }) }) })
-              ] }) })
+              ] }) }),
+              /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { className: "flex flex-col gap-3 border-t border-white/6 px-5 py-4 sm:flex-row sm:items-center sm:justify-between sm:px-6", children: [
+                /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("p", { className: "text-sm text-slate-400", children: [
+                  "Showing ",
+                  Math.min(visibleReviewCount, sortedReviews.length),
+                  " of ",
+                  sortedReviews.length,
+                  " reviews"
+                ] }),
+                visibleReviewCount < sortedReviews.length ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)(
+                  "button",
+                  {
+                    type: "button",
+                    onClick: () => setVisibleReviewCount((current) => current + 10),
+                    className: "inline-flex items-center justify-center rounded-full border border-white/10 bg-white/[0.04] px-4 py-2 text-sm font-medium text-slate-100 transition hover:border-cyan-400/40 hover:bg-cyan-400/10 hover:text-cyan-100",
+                    children: "Show more"
+                  }
+                ) : null
+              ] })
             ] })
           ] }),
           /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("aside", { className: "space-y-6", children: [
