@@ -285,12 +285,12 @@ const ScoreBadge = ({ score }: { score: number }) => {
   const tone = scoreTone(score);
 
   return (
-    <div className="inline-flex items-center gap-3 rounded-full border border-white/8 bg-slate-950/60 px-3 py-2">
-      <ScoreGauge score={score} size={40} compact />
-      <div className="leading-tight">
-        <div className={`text-sm font-semibold ${tone.text}`}>{tone.label}</div>
-        <div className="text-xs text-slate-400">{Math.round(score)}/100</div>
-      </div>
+    <div
+      className="inline-flex items-center gap-2 rounded-full border border-white/8 bg-slate-950/60 px-3 py-2"
+      aria-label={`Quality score ${Math.round(score)} out of 100`}
+    >
+      <span className="h-2.5 w-2.5 rounded-full" style={{ backgroundColor: tone.ring }} aria-hidden="true" />
+      <span className="text-sm font-semibold text-slate-100">{Math.round(score)}</span>
     </div>
   );
 };
@@ -670,13 +670,13 @@ export default function App() {
                 <table className="min-w-full divide-y divide-white/6 text-left">
                   <thead className="bg-white/[0.02] text-xs uppercase tracking-[0.22em] text-slate-400">
                     <tr>
-                      <th className="px-5 py-4 font-medium sm:px-6">Repo</th>
-                      <th className="px-5 py-4 font-medium sm:px-6">Pull Request</th>
-                      <th className="px-5 py-4 font-medium sm:px-6">Platform</th>
-                      <th className="px-5 py-4 font-medium sm:px-6">Score</th>
-                      <th className="px-5 py-4 font-medium sm:px-6">Issues</th>
-                      <th className="px-5 py-4 font-medium sm:px-6">Updated</th>
-                      <th className="px-5 py-4 font-medium sm:px-6 text-right">Action</th>
+                      <th className="min-w-[140px] px-4 py-4 font-medium sm:px-4">Repo</th>
+                      <th className="px-4 py-4 font-medium sm:px-4">Pull Request</th>
+                      <th className="px-4 py-4 font-medium sm:px-4">Platform</th>
+                      <th className="px-4 py-4 font-medium sm:px-4">Score</th>
+                      <th className="px-4 py-4 font-medium sm:px-4">Issues</th>
+                      <th className="px-4 py-4 font-medium sm:px-4 text-right">Updated</th>
+                      <th className="px-4 py-4 font-medium sm:px-4 text-right">Action</th>
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-white/6">
@@ -688,15 +688,15 @@ export default function App() {
                         return (
                           <tr
                             key={review.key}
-                            className={`transition-colors ${isActive ? "bg-cyan-500/5" : "hover:bg-white/[0.03]"}`}
+                            className={`transition-colors duration-200 ${isActive ? "bg-cyan-500/5" : "hover:bg-white/[0.045]"}`}
                           >
-                            <td className="px-5 py-4 align-top sm:px-6">
+                            <td className="min-w-[140px] px-4 py-[14px] align-top sm:px-4">
                               <div className="max-w-[240px]">
                                 <p className="truncate font-medium text-slate-50">{review.repoFullName}</p>
                                 <p className="mt-1 text-xs text-slate-400">{review.author}</p>
                               </div>
                             </td>
-                            <td className="px-5 py-4 align-top sm:px-6">
+                            <td className="px-4 py-[14px] align-top sm:px-4">
                               <div className="max-w-[320px]">
                                 <p className="font-medium text-slate-50">{review.title}</p>
                                 <p className="mt-1 text-xs text-slate-400">
@@ -704,20 +704,22 @@ export default function App() {
                                 </p>
                               </div>
                             </td>
-                            <td className="px-5 py-4 align-top sm:px-6">
+                            <td className="px-4 py-[14px] align-top sm:px-4">
                               <PlatformPill platform={review.platform} />
                             </td>
-                            <td className="px-5 py-4 align-top sm:px-6">
+                            <td className="px-4 py-[14px] align-top sm:px-4">
                               <ScoreBadge score={review.score} />
                             </td>
-                            <td className="px-5 py-4 align-top sm:px-6">
+                            <td className="px-4 py-[14px] align-top sm:px-4">
                               <div>
                                 <p className="text-sm font-medium text-slate-100">{review.issueCount} issues</p>
                                 <p className={`mt-1 text-xs ${tone.text}`}>{review.criticalIssueCount} critical</p>
                               </div>
                             </td>
-                            <td className="px-5 py-4 align-top text-sm text-slate-400 sm:px-6">{formatTimeAgo(review.createdAt)}</td>
-                            <td className="px-5 py-4 align-top text-right sm:px-6">
+                            <td className="px-4 py-[14px] align-top text-right text-sm text-slate-400 opacity-50 sm:px-4">
+                              {formatTimeAgo(review.createdAt)}
+                            </td>
+                            <td className="px-4 py-[14px] align-top text-right sm:px-4">
                               <button
                                 type="button"
                                 onClick={() => setActiveReviewKey(review.key)}
