@@ -128,6 +128,8 @@ corepack pnpm start
 
 For Render specifically, this repo includes a [render.yaml](render.yaml) blueprint. Create a new Render Web Service from the repository and let Render read the blueprint, then set the listed environment variables in the Render dashboard.
 
+The Render blueprint also enables `DEMO_SEED=true`, so the live dashboard boots with seeded demo reviews.
+
 ## Registering Webhooks
 
 ### GitHub App

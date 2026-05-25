@@ -7,6 +7,8 @@ services:
     startCommand: corepack pnpm --filter @reviewai/dashboard start
     autoDeploy: true
     envVars:
+      - key: DEMO_SEED
+        value: "true"
       - key: OPENROUTER_API_KEY
         sync: false
       - key: GITHUB_APP_SECRET
