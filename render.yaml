@@ -3,8 +3,8 @@ services:
     name: reviewai
     runtime: node
     plan: free
-    buildCommand: corepack pnpm install --frozen-lockfile && corepack pnpm build
-    startCommand: corepack pnpm start
+    buildCommand: corepack pnpm install --frozen-lockfile && corepack pnpm --filter @reviewai/dashboard build
+    startCommand: corepack pnpm --filter @reviewai/dashboard start
     autoDeploy: true
     envVars:
       - key: OPENROUTER_API_KEY
