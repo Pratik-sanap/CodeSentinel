@@ -28,6 +28,7 @@
     "build": "node ./scripts/build-frontend.mjs && tsc -b",
     "build:frontend": "node ./scripts/build-frontend.mjs",
     "dev": "tsx watch src/server.ts",
+    "start": "node dist/server.js",
     "lint": "eslint \"src/**/*.ts\"",
     "typecheck": "tsc -b --pretty false"
   },

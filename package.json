@@ -10,6 +10,7 @@
     "build": "tsc -b tsconfig.json",
     "dev": "corepack pnpm --filter @reviewai/dashboard dev",
     "lint": "eslint .",
+    "start": "node packages/dashboard/dist/server.js",
     "test": "vitest run",
     "typecheck": "tsc -b tsconfig.json --pretty false",
     "format": "prettier --write ."

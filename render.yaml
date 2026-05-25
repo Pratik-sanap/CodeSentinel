@@ -1,0 +1,19 @@
+services:
+  - type: web
+    name: reviewai
+    runtime: node
+    plan: free
+    buildCommand: corepack pnpm install --frozen-lockfile && corepack pnpm build
+    startCommand: corepack pnpm start
+    autoDeploy: true
+    envVars:
+      - key: OPENROUTER_API_KEY
+        sync: false
+      - key: GITHUB_APP_SECRET
+        sync: false
+      - key: GITHUB_APP_TOKEN
+        sync: false
+      - key: GITLAB_WEBHOOK_SECRET
+        sync: false
+      - key: GITLAB_API_TOKEN
+        sync: false

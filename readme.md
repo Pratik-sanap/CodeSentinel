@@ -107,6 +107,27 @@ bash scripts/demo-setup.sh
 
 That script checks your environment variables, starts the dashboard, starts ngrok, seeds five demo reviews, prints webhook URLs, and opens the browser.
 
+## Deployment
+
+This repository includes a Dockerfile so the app can run on any container host that supports a long-lived Node.js service.
+
+```bash
+docker build -t reviewai .
+docker run --env-file .env -p 3000:3000 reviewai
+```
+
+Set the same environment variables in your host platform and expose port `3000`. The service entrypoint is `packages/dashboard/dist/server.js` after `pnpm build` completes.
+
+If you prefer a managed platform such as Render, Railway, Fly.io, or a VPS, use the Dockerfile or run:
+
+```bash
+corepack pnpm install --frozen-lockfile
+corepack pnpm build
+corepack pnpm start
+```
+
+For Render specifically, this repo includes a [render.yaml](render.yaml) blueprint. Create a new Render Web Service from the repository and let Render read the blueprint, then set the listed environment variables in the Render dashboard.
+
 ## Registering Webhooks
 
 ### GitHub App
