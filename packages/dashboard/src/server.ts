@@ -652,10 +652,8 @@ const port = Number(process.env.PORT ?? 3000);
 const host = process.env.HOST ?? "0.0.0.0";
 const app = createApp();
 
-if (process.env.DEMO_SEED === "true") {
-  const seeded = seedDemoStore();
-  console.log(`Seeded ${seeded} demo reviews on startup.`);
-}
+const seeded = seedDemoStore();
+console.log(`Seeded ${seeded} demo reviews on startup.`);
 
 app.listen(port, host, () => {
   console.log(`ReviewAI dashboard listening on http://localhost:${port}`);
