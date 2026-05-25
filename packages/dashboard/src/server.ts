@@ -67,6 +67,8 @@ const publicDirectory = path.resolve(currentDirectory, "../public");
 const reviewStore = new Map<string, StoredReview>();
 let demoFeedTimer: ReturnType<typeof setInterval> | null = null;
 let demoFeedCounter = 0;
+const MAX_STORED_REVIEWS = Number(process.env.MAX_STORED_REVIEWS ?? 500);
+const MAX_DEMO_FEED = Number(process.env.MAX_DEMO_FEED ?? 500);
 
 const reviewKey = (event: PullRequestEvent): string => `${event.platform}:${event.repoFullName}:${event.id}`;
 
@@ -82,6 +84,13 @@ const saveReview = (event: PullRequestEvent, files: FileDiff[], result: ReviewRe
 
   reviewStore.delete(record.key);
   reviewStore.set(record.key, record);
+  // Evict oldest entries when exceeding configured limit to avoid unbounded growth
+  if (reviewStore.size > MAX_STORED_REVIEWS) {
+    const oldestKey = reviewStore.keys().next().value as string | undefined;
+    if (oldestKey) {
+      reviewStore.delete(oldestKey);
+    }
+  }
   return record;
 };
 
@@ -419,6 +428,13 @@ const seedDemoStore = (): number => {
         processingMs: 700 + index * 45
       }
     );
+
+      // Stop automatic demo feed when it reaches the configured maximum
+      if (demoFeedCounter >= MAX_DEMO_FEED && demoFeedTimer !== null) {
+        clearInterval(demoFeedTimer);
+        demoFeedTimer = null;
+        console.log(`Demo feed stopped after ${demoFeedCounter} iterations (MAX_DEMO_FEED=${MAX_DEMO_FEED}).`);
+      }
   }, 12_000);
 
   return seeds.length;
