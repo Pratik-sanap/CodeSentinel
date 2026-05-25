@@ -66,17 +66,14 @@ Visit [aistudio.google.com](https://aistudio.google.com) and create a free Gemin
 
 ### 2. Set up `.env`
 
-Create a `.env` file in the repository root:
+Create a `.env` file in the repository root. You can copy the included example instead of creating it by hand:
 
-```env
-OPENROUTER_API_KEY=your-openrouter-api-key
-GITHUB_APP_SECRET=your-github-webhook-secret
-GITHUB_APP_TOKEN=your-github-token-or-installation-token
-GITLAB_WEBHOOK_SECRET=your-gitlab-webhook-secret
-GITLAB_API_TOKEN=your-gitlab-token
-PORT=3000
-HOST=0.0.0.0
+```bash
+cp .env.example .env  # macOS / Linux
+copy .env.example .env # Windows (PowerShell/CMD)
 ```
+
+See [`.env.example`](.env.example) for the full list of variables and placeholders.
 
 ### 3. Install dependencies
 
@@ -90,7 +87,7 @@ corepack pnpm install
 corepack pnpm dev
 ```
 
-The dashboard runs at `http://localhost:3000`.
+The dashboard runs at `http://127.0.0.1:3000/`.
 
 ### 5. Expose the server with ngrok
 
