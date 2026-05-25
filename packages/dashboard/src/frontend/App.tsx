@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import {
   Area,
   AreaChart,
@@ -340,13 +340,9 @@ export default function App() {
   const [activeReviewDetail, setActiveReviewDetail] = useState<ReviewDetailResponse | null>(null);
   const [detailLoading, setDetailLoading] = useState(false);
   const [detailError, setDetailError] = useState<string | null>(null);
-  const [explainOpen, setExplainOpen] = useState(false);
+  const [showExplainModal, setShowExplainModal] = useState(false);
   const [explainTitle, setExplainTitle] = useState("");
-  const [explainText, setExplainText] = useState("");
-  const [explainStatus, setExplainStatus] = useState<"idle" | "streaming" | "done" | "error">("idle");
-  const explanationBufferRef = useRef("");
-  const typewriterTimerRef = useRef<number | null>(null);
-  const sourceRef = useRef<EventSource | null>(null);
+  const [explanation, setExplanation] = useState("");
 
   useEffect(() => {
     let isMounted = true;
@@ -388,18 +384,6 @@ export default function App() {
     return () => {
       isMounted = false;
       window.clearInterval(intervalId);
-    };
-  }, []);
-
-  useEffect(() => {
-    return () => {
-      if (sourceRef.current) {
-        sourceRef.current.close();
-      }
-
-      if (typewriterTimerRef.current !== null) {
-        window.clearTimeout(typewriterTimerRef.current);
-      }
     };
   }, []);
 
@@ -499,76 +483,36 @@ export default function App() {
       }));
   }, [reviews]);
 
-  const stopExplanation = () => {
-    if (sourceRef.current) {
-      sourceRef.current.close();
-      sourceRef.current = null;
-    }
-
-    if (typewriterTimerRef.current !== null) {
-      window.clearTimeout(typewriterTimerRef.current);
-      typewriterTimerRef.current = null;
-    }
-
-    explanationBufferRef.current = "";
-  };
-
-  const typewriterStep = () => {
-    if (typewriterTimerRef.current !== null) {
-      return;
-    }
-
-    const tick = () => {
-      if (explanationBufferRef.current.length === 0) {
-        typewriterTimerRef.current = null;
-        return;
+  const handleExplain = async (selectedReview: ReviewListItem, issueIndex: number) => {
+    setExplanation("Loading...");
+    setShowExplainModal(true);
+    try {
+      console.log('FULL REVIEW OBJECT:', JSON.stringify(selectedReview, null, 2));
+      const fullKey =
+        [selectedReview.key, selectedReview.prId].find((value) => typeof value === "string" && value.includes("github:")) ??
+        selectedReview.key;
+      const url = `/api/reviews/${encodeURIComponent(fullKey)}/explain/${issueIndex}`;
+      const res = await fetch(url);
+      const data = (await res.json()) as { explanation?: string; error?: string };
+      if (data.explanation) {
+        setExplanation(data.explanation);
+      } else {
+        setExplanation("Error: " + (data.error || "Unknown error"));
       }
-
-      const nextChar = explanationBufferRef.current[0] ?? "";
-      explanationBufferRef.current = explanationBufferRef.current.slice(1);
-      setExplainText((current) => current + nextChar);
-      typewriterTimerRef.current = window.setTimeout(tick, 10);
-    };
-
-    typewriterTimerRef.current = window.setTimeout(tick, 10);
-  };
-
-  const explainIssue = (issueIndex: number, issue: ReviewIssue) => {
-    if (!activeReview) {
-      return;
+    } catch (e) {
+      setExplanation("Failed to connect to server.");
     }
-
-    stopExplanation();
-    setExplainTitle(issue.message);
-    setExplainText("");
-    setExplainStatus("streaming");
-    setExplainOpen(true);
-
-    const source = new EventSource(`/api/reviews/${activeReview.prId}/explain/${issueIndex}`);
-    sourceRef.current = source;
-
-    source.onmessage = (event) => {
-      explanationBufferRef.current += event.data;
-      typewriterStep();
-    };
-
-    source.addEventListener("done", () => {
-      setExplainStatus("done");
-      source.close();
-      sourceRef.current = null;
-    });
-
-    source.addEventListener("error", () => {
-      setExplainStatus("error");
-      source.close();
-      sourceRef.current = null;
-    });
   };
 
   const handleViewDetailsClick = (review: ReviewListItem) => {
     console.log("View Details clicked", review.prId);
     setActiveReviewKey(review.key);
   };
+
+  const explanationParagraphs = explanation
+    .split(/\n+/)
+    .map((paragraph) => paragraph.trim())
+    .filter((paragraph) => paragraph.length > 0);
 
   return (
     <div className="min-h-screen bg-slate-950 text-slate-100">
@@ -587,7 +531,7 @@ export default function App() {
                 </div>
               </div>
               <p className="mt-4 max-w-2xl text-sm leading-7 text-slate-400 sm:text-[15px]">
-                A polished review cockpit for GitHub and GitLab pull requests, with live quality telemetry, issue trends, and automated guidance powered by Gemini 2.5 Flash.
+                A polished review cockpit for GitHub and GitLab pull requests, with live quality telemetry, issue trends, and automated guidance Powered by AI.
               </p>
             </div>
 
@@ -595,7 +539,7 @@ export default function App() {
               <PlatformBadge platform="github" />
               <PlatformBadge platform="gitlab" />
               <span className="inline-flex items-center rounded-full border border-cyan-400/20 bg-cyan-400/10 px-3 py-1 text-xs font-medium text-cyan-200">
-                Powered by Gemini 2.5 Flash
+                Powered by AI
               </span>
             </div>
           </div>
@@ -920,7 +864,10 @@ export default function App() {
 
                               <button
                                 type="button"
-                                onClick={() => explainIssue(index, issue)}
+                                onClick={() => {
+                                  setExplainTitle(issue.message);
+                                  void handleExplain(activeReview, index);
+                                }}
                                 className="inline-flex shrink-0 items-center justify-center rounded-full border border-cyan-400/25 bg-cyan-400/10 px-4 py-2 text-sm font-medium text-cyan-100 transition hover:border-cyan-300/50 hover:bg-cyan-400/15"
                               >
                                 Explain this ✦
@@ -959,7 +906,7 @@ export default function App() {
           </aside>
         </section>
 
-        {explainOpen ? (
+        {showExplainModal ? (
           <div className="fixed inset-0 z-50 flex items-end justify-center bg-slate-950/70 p-4 backdrop-blur-sm sm:items-center">
             <div className="w-full max-w-3xl overflow-hidden rounded-[32px] border border-white/10 bg-slate-950 shadow-[0_30px_120px_rgba(0,0,0,0.55)]">
               <div className="flex items-start justify-between gap-4 border-b border-white/8 px-5 py-4 sm:px-6">
@@ -970,10 +917,8 @@ export default function App() {
                 <button
                   type="button"
                   onClick={() => {
-                    stopExplanation();
-                    setExplainOpen(false);
-                    setExplainStatus("idle");
-                    setExplainText("");
+                    setShowExplainModal(false);
+                    setExplanation("");
                   }}
                   className="rounded-full border border-white/10 bg-white/[0.04] px-3 py-2 text-sm text-slate-200 transition hover:bg-white/[0.08]"
                 >
@@ -981,12 +926,17 @@ export default function App() {
                 </button>
               </div>
 
-              <div className="max-h-[70vh] overflow-y-auto px-5 py-5 sm:px-6">
-                <div className="rounded-[28px] border border-white/8 bg-white/[0.03] p-5 text-sm leading-7 text-slate-200 whitespace-pre-wrap">
-                  {explainText.length > 0 ? explainText : explainStatus === "streaming" ? "Starting explanation..." : "No explanation yet."}
-                </div>
-                <div className="mt-4 text-xs uppercase tracking-[0.26em] text-slate-500">
-                  {explainStatus === "streaming" ? "Gemini is streaming the explanation" : explainStatus === "done" ? "Explanation complete" : explainStatus === "error" ? "Stream interrupted" : "Idle"}
+              <div className="max-h-[400px] overflow-y-auto px-5 py-5 sm:px-6 [scrollbar-width:thin] [scrollbar-color:rgba(148,163,184,0.45)_transparent] [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-slate-500/40">
+                <div className="rounded-[28px] border border-white/8 bg-white/[0.03] p-5 text-sm leading-7 text-slate-200">
+                  {explanationParagraphs.length > 0 ? (
+                    explanationParagraphs.map((paragraph, index) => (
+                      <p key={`${paragraph}-${index}`} className="mb-3 last:mb-0">
+                        {paragraph}
+                      </p>
+                    ))
+                  ) : (
+                    <p className="mb-3 last:mb-0">{explanation}</p>
+                  )}
                 </div>
               </div>
             </div>

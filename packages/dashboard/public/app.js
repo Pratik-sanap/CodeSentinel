@@ -31379,13 +31379,9 @@
     const [activeReviewDetail, setActiveReviewDetail] = (0, import_react35.useState)(null);
     const [detailLoading, setDetailLoading] = (0, import_react35.useState)(false);
     const [detailError, setDetailError] = (0, import_react35.useState)(null);
-    const [explainOpen, setExplainOpen] = (0, import_react35.useState)(false);
+    const [showExplainModal, setShowExplainModal] = (0, import_react35.useState)(false);
     const [explainTitle, setExplainTitle] = (0, import_react35.useState)("");
-    const [explainText, setExplainText] = (0, import_react35.useState)("");
-    const [explainStatus, setExplainStatus] = (0, import_react35.useState)("idle");
-    const explanationBufferRef = (0, import_react35.useRef)("");
-    const typewriterTimerRef = (0, import_react35.useRef)(null);
-    const sourceRef = (0, import_react35.useRef)(null);
+    const [explanation, setExplanation] = (0, import_react35.useState)("");
     (0, import_react35.useEffect)(() => {
       let isMounted = true;
       const loadReviews = async () => {
@@ -31418,16 +31414,6 @@
       return () => {
         isMounted = false;
         window.clearInterval(intervalId);
-      };
-    }, []);
-    (0, import_react35.useEffect)(() => {
-      return () => {
-        if (sourceRef.current) {
-          sourceRef.current.close();
-        }
-        if (typewriterTimerRef.current !== null) {
-          window.clearTimeout(typewriterTimerRef.current);
-        }
       };
     }, []);
     const sortedReviews = (0, import_react35.useMemo)(
@@ -31506,58 +31492,27 @@
         repo: review.repoFullName
       }));
     }, [reviews]);
-    const stopExplanation = () => {
-      if (sourceRef.current) {
-        sourceRef.current.close();
-        sourceRef.current = null;
-      }
-      if (typewriterTimerRef.current !== null) {
-        window.clearTimeout(typewriterTimerRef.current);
-        typewriterTimerRef.current = null;
-      }
-      explanationBufferRef.current = "";
-    };
-    const typewriterStep = () => {
-      if (typewriterTimerRef.current !== null) {
-        return;
-      }
-      const tick = () => {
-        if (explanationBufferRef.current.length === 0) {
-          typewriterTimerRef.current = null;
-          return;
+    const handleExplain = async (selectedReview, issueIndex) => {
+      setExplanation("Loading...");
+      setShowExplainModal(true);
+      try {
+        console.log("FULL REVIEW OBJECT:", JSON.stringify(selectedReview, null, 2));
+        const fullKey = [selectedReview.key, selectedReview.prId].find((value) => typeof value === "string" && value.includes("github:")) ?? selectedReview.key;
+        const url = `/api/reviews/${encodeURIComponent(fullKey)}/explain/${issueIndex}`;
+        const res = await fetch(url);
+        const data = await res.json();
+        if (data.explanation) {
+          setExplanation(data.explanation);
+        } else {
+          setExplanation("Error: " + (data.error || "Unknown error"));
         }
-        const nextChar = explanationBufferRef.current[0] ?? "";
-        explanationBufferRef.current = explanationBufferRef.current.slice(1);
-        setExplainText((current) => current + nextChar);
-        typewriterTimerRef.current = window.setTimeout(tick, 10);
-      };
-      typewriterTimerRef.current = window.setTimeout(tick, 10);
-    };
-    const explainIssue = (issueIndex, issue) => {
-      if (!activeReview) {
-        return;
+      } catch (e) {
+        setExplanation("Failed to connect to server.");
       }
-      stopExplanation();
-      setExplainTitle(issue.message);
-      setExplainText("");
-      setExplainStatus("streaming");
-      setExplainOpen(true);
-      const source = new EventSource(`/api/reviews/${activeReview.prId}/explain/${issueIndex}`);
-      sourceRef.current = source;
-      source.onmessage = (event) => {
-        explanationBufferRef.current += event.data;
-        typewriterStep();
-      };
-      source.addEventListener("done", () => {
-        setExplainStatus("done");
-        source.close();
-        sourceRef.current = null;
-      });
-      source.addEventListener("error", () => {
-        setExplainStatus("error");
-        source.close();
-        sourceRef.current = null;
-      });
+    };
+    const handleViewDetailsClick = (review) => {
+      console.log("View Details clicked", review.prId);
+      setActiveReviewKey(review.key);
     };
     return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { className: "min-h-screen bg-slate-950 text-slate-100", children: [
       /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "pointer-events-none fixed inset-0 bg-[radial-gradient(circle_at_top_left,_rgba(59,130,246,0.16),_transparent_30%),radial-gradient(circle_at_top_right,_rgba(34,197,94,0.12),_transparent_24%),radial-gradient(circle_at_80%_20%,_rgba(245,158,11,0.14),_transparent_28%)]" }),
@@ -31572,12 +31527,12 @@
                 /* @__PURE__ */ (0, import_jsx_runtime.jsx)("h1", { className: "mt-2 text-3xl font-semibold tracking-tight text-slate-50 sm:text-4xl", children: "AI code reviews, instantly" })
               ] })
             ] }),
-            /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", { className: "mt-4 max-w-2xl text-sm leading-7 text-slate-400 sm:text-[15px]", children: "A polished review cockpit for GitHub and GitLab pull requests, with live quality telemetry, issue trends, and automated guidance powered by Gemini 2.5 Flash." })
+            /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", { className: "mt-4 max-w-2xl text-sm leading-7 text-slate-400 sm:text-[15px]", children: "A polished review cockpit for GitHub and GitLab pull requests, with live quality telemetry, issue trends, and automated guidance Powered by AI." })
           ] }),
           /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { className: "flex flex-wrap items-center gap-3", children: [
             /* @__PURE__ */ (0, import_jsx_runtime.jsx)(PlatformBadge, { platform: "github" }),
             /* @__PURE__ */ (0, import_jsx_runtime.jsx)(PlatformBadge, { platform: "gitlab" }),
-            /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { className: "inline-flex items-center rounded-full border border-cyan-400/20 bg-cyan-400/10 px-3 py-1 text-xs font-medium text-cyan-200", children: "Powered by Gemini 2.5 Flash" })
+            /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { className: "inline-flex items-center rounded-full border border-cyan-400/20 bg-cyan-400/10 px-3 py-1 text-xs font-medium text-cyan-200", children: "Powered by AI" })
           ] })
         ] }) }),
         /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("section", { className: "grid gap-4 md:grid-cols-2 xl:grid-cols-4", children: [
@@ -31714,7 +31669,7 @@
                           "button",
                           {
                             type: "button",
-                            onClick: () => setActiveReviewKey(review.key),
+                            onClick: () => handleViewDetailsClick(review),
                             className: "inline-flex items-center rounded-full border border-white/10 bg-white/[0.04] px-4 py-2 text-sm font-medium text-slate-100 transition hover:border-cyan-400/40 hover:bg-cyan-400/10 hover:text-cyan-100",
                             children: "View Details"
                           }
@@ -31875,7 +31830,10 @@
                       "button",
                       {
                         type: "button",
-                        onClick: () => explainIssue(index, issue),
+                        onClick: () => {
+                          setExplainTitle(issue.message);
+                          void handleExplain(activeReview, index);
+                        },
                         className: "inline-flex shrink-0 items-center justify-center rounded-full border border-cyan-400/25 bg-cyan-400/10 px-4 py-2 text-sm font-medium text-cyan-100 transition hover:border-cyan-300/50 hover:bg-cyan-400/15",
                         children: "Explain this \u2726"
                       }
@@ -31899,7 +31857,7 @@
             ] })
           ] })
         ] }),
-        explainOpen ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "fixed inset-0 z-50 flex items-end justify-center bg-slate-950/70 p-4 backdrop-blur-sm sm:items-center", children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { className: "w-full max-w-3xl overflow-hidden rounded-[32px] border border-white/10 bg-slate-950 shadow-[0_30px_120px_rgba(0,0,0,0.55)]", children: [
+        showExplainModal ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "fixed inset-0 z-50 flex items-end justify-center bg-slate-950/70 p-4 backdrop-blur-sm sm:items-center", children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { className: "w-full max-w-3xl overflow-hidden rounded-[32px] border border-white/10 bg-slate-950 shadow-[0_30px_120px_rgba(0,0,0,0.55)]", children: [
           /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { className: "flex items-start justify-between gap-4 border-b border-white/8 px-5 py-4 sm:px-6", children: [
             /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [
               /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", { className: "text-xs font-semibold uppercase tracking-[0.28em] text-cyan-300", children: "Explain this issue" }),
@@ -31910,20 +31868,15 @@
               {
                 type: "button",
                 onClick: () => {
-                  stopExplanation();
-                  setExplainOpen(false);
-                  setExplainStatus("idle");
-                  setExplainText("");
+                  setShowExplainModal(false);
+                  setExplanation("");
                 },
                 className: "rounded-full border border-white/10 bg-white/[0.04] px-3 py-2 text-sm text-slate-200 transition hover:bg-white/[0.08]",
                 children: "Close"
               }
             )
           ] }),
-          /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { className: "max-h-[70vh] overflow-y-auto px-5 py-5 sm:px-6", children: [
-            /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "rounded-[28px] border border-white/8 bg-white/[0.03] p-5 text-sm leading-7 text-slate-200 whitespace-pre-wrap", children: explainText.length > 0 ? explainText : explainStatus === "streaming" ? "Starting explanation..." : "No explanation yet." }),
-            /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "mt-4 text-xs uppercase tracking-[0.26em] text-slate-500", children: explainStatus === "streaming" ? "Gemini is streaming the explanation" : explainStatus === "done" ? "Explanation complete" : explainStatus === "error" ? "Stream interrupted" : "Idle" })
-          ] })
+          /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "max-h-[70vh] overflow-y-auto px-5 py-5 sm:px-6", children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "rounded-[28px] border border-white/8 bg-white/[0.03] p-5 text-sm leading-7 text-slate-200 whitespace-pre-wrap", children: explanation }) })
         ] }) }) : null
       ] })
     ] });

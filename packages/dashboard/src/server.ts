@@ -1,12 +1,11 @@
-import "dotenv/config";
-
 import cors from "cors";
 import express, { type Request, type Response } from "express";
+import dotenv from "dotenv";
 import morgan from "morgan";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
-import { explainIssue, getMergeRecommendation, runFullReview, type MergeRecommendation } from "@reviewai/core";
+import { getMergeRecommendation, runFullReview, type MergeRecommendation } from "@reviewai/core";
 import { createGithubRouter } from "@reviewai/github-adapter";
 import { createGitlabRouter } from "@reviewai/gitlab-adapter";
 import type { FileDiff, PullRequestEvent, ReviewInput, ReviewIssue, ReviewResult } from "@reviewai/shared";
@@ -63,6 +62,7 @@ interface ReviewStats {
 }
 
 const currentDirectory = path.dirname(fileURLToPath(import.meta.url));
+dotenv.config({ path: path.resolve(currentDirectory, "../../../.env") });
 const publicDirectory = path.resolve(currentDirectory, "../public");
 const reviewStore = new Map<string, StoredReview>();
 let demoFeedTimer: ReturnType<typeof setInterval> | null = null;
@@ -108,31 +108,7 @@ const listRecentReviews = (): ReviewListItem[] =>
 const findReviewByPrId = (prId: string): StoredReview | undefined =>
   Array.from(reviewStore.values())
     .reverse()
-    .find((record) => record.result.prId === prId || record.event.id === prId);
-
-const resolveIssueByIndex = (review: StoredReview, issueIndex: number): ReviewIssue | undefined => review.result.issues[issueIndex];
-
-const buildCodeContext = (review: StoredReview, issue: ReviewIssue): string => {
-  const file = review.files.find((entry) => entry.filename === issue.filename) ?? review.files[0];
-
-  if (!file) {
-    return "No source context is available for this issue.";
-  }
-
-  const lines = file.patch.replace(/\r\n/g, "\n").split("\n");
-  const exactIndex = lines.findIndex((line) => line.startsWith(`+${issue.line}:`) || line.startsWith(`-${issue.line}:`));
-  const targetIndex = exactIndex >= 0 ? exactIndex : 0;
-  const startIndex = Math.max(0, targetIndex - 5);
-  const endIndex = Math.min(lines.length, targetIndex + 6);
-  const contextLines = lines.slice(startIndex, endIndex);
-
-  return [
-    `File: ${file.filename}`,
-    `Issue line: ${issue.line}`,
-    "Context (5 lines before and after where available):",
-    contextLines.length > 0 ? contextLines.join("\n") : "No diff context captured for this file."
-  ].join("\n");
-};
+    .find((record) => record.result.prId === prId || record.event.id === prId || record.key === prId);
 
 const pickCycle = <T>(values: readonly [T, ...T[]], index: number): T => values[index % values.length]!;
 
@@ -569,51 +545,71 @@ export const createApp = (): express.Express => {
     response.json(review);
   });
 
-  app.get<{ prId: string; issueIndex: string }>("/api/reviews/:prId/explain/:issueIndex", async (request: Request, response: Response) => {
-    const prId = Array.isArray(request.params.prId) ? request.params.prId[0] : request.params.prId;
-    const issueIndexValue = Array.isArray(request.params.issueIndex) ? request.params.issueIndex[0] : request.params.issueIndex;
-    const issueIndex = Number.parseInt(String(issueIndexValue), 10);
-
-    if (typeof prId !== "string" || !Number.isInteger(issueIndex) || issueIndex < 0) {
-      response.status(400).json({ error: "Invalid explanation request." });
-      return;
-    }
-
-    const review = findReviewByPrId(prId);
-
-    if (!review) {
-      response.status(404).json({ error: "Review not found." });
-      return;
-    }
-
-    const issue = resolveIssueByIndex(review, issueIndex);
-
-    if (!issue) {
-      response.status(404).json({ error: "Issue not found." });
-      return;
-    }
-
-    response.status(200);
-    response.setHeader("Content-Type", "text/event-stream");
-    response.setHeader("Cache-Control", "no-cache");
-    response.setHeader("Connection", "keep-alive");
-    response.flushHeaders();
+  app.get<{ prId: string; issueIndex: string }>("/api/reviews/:prId/explain/:issueIndex", async (req: Request, res: Response) => {
+    console.log('Explain called, store size:', reviewStore.size);
+    console.log('All keys:', Array.from(reviewStore.keys()).slice(0, 3));
+    console.log('Raw param:', req.params.prId);
 
     try {
-      for await (const chunk of explainIssue(issue, buildCodeContext(review, issue))) {
-        response.write(`data: ${chunk}\n\n`);
+      const rawId = decodeURIComponent(String(req.params.prId));
+      const index = Number.parseInt(String(req.params.issueIndex), 10);
+
+      let stored = reviewStore.get(rawId);
+
+      if (!stored) {
+        for (const [key, value] of reviewStore.entries()) {
+          if (value.result.prId === rawId || value.event.id === rawId || key.endsWith(rawId) || key.includes(rawId)) {
+            stored = value;
+            break;
+          }
+        }
       }
 
-      response.write("data: [DONE]\n\n");
-      response.end();
-    } catch (error) {
-      console.error("SSE explanation stream failed", {
-        prId,
-        issueIndex,
-        error
+      if (!stored) {
+        console.log("Available keys:", Array.from(reviewStore.keys()));
+        console.log("Looking for:", rawId);
+        return res.status(404).json({ error: "Review not found" });
+      }
+
+      const issue = stored.result.issues[index];
+      if (!issue) return res.status(404).json({ error: "Issue not found" });
+
+      const prompt = `You are a senior code reviewer. Explain this issue clearly:
+Issue: ${issue.message}
+File: ${issue.filename} line ${issue.line}  
+Category: ${issue.category} (${issue.severity})
+
+Explain: 1) Why this is a problem 2) Real-world impact 3) How to fix it with a code example.`;
+
+      console.log('OPENROUTER_API_KEY present:', !!process.env.OPENROUTER_API_KEY);
+      console.log('OPENROUTER_API_KEY starts with:', process.env.OPENROUTER_API_KEY?.slice(0, 10));
+
+      const response = await fetch("https://openrouter.ai/api/v1/chat/completions", {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${process.env.OPENROUTER_API_KEY}`,
+          "Content-Type": "application/json",
+          "HTTP-Referer": "http://localhost:3000",
+          "X-Title": "CodeSentinel"
+        },
+        body: JSON.stringify({
+          model: "openai/gpt-3.5-turbo",
+          messages: [{ role: "user", content: prompt }],
+          stream: false
+        })
       });
-      response.write("data: [ERROR]\n\n");
-      response.end();
+
+      const rawText = await response.text();
+      console.log('OpenRouter raw response:', response.status, rawText.slice(0, 200));
+      const data = JSON.parse(rawText);
+      if (!response.ok) {
+        console.error("OpenRouter error:", data);
+        return res.status(500).json({ error: "AI call failed" });
+      }
+      res.json({ explanation: data.choices[0].message.content });
+    } catch (err) {
+      console.error("Explain route error:", err);
+      res.status(500).json({ error: String(err) });
     }
   });
 
